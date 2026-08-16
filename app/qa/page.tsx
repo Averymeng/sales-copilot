@@ -43,69 +43,52 @@ export default function QAPage() {
   }
 
   return (
-    <div style={{ maxWidth: 760, margin: "0 auto", display: "flex", flexDirection: "column", height: "calc(100vh - 140px)" }}>
-      <div className="card-head" style={{ marginBottom: 14 }}>
-        <h1 style={{ margin: 0, fontSize: 22, color: "var(--ink)" }}>精灵问答</h1>
-        <span style={{ color: "var(--muted)", fontSize: 12 }}>4 个 Agent 协同 · 自然语言驱动</span>
-      </div>
+    <div style={{ maxWidth: 820, margin: "0 auto" }}>
+      <header className="topbar">
+        <div><h1>精灵问答</h1></div>
+        <div className="search">🔍<input placeholder="Ask anything" /></div>
+      </header>
 
-      <div className="card" style={{ flex: 1, overflowY: "auto", padding: 18, display: "flex", flexDirection: "column", gap: 14 }}>
-        {messages.length === 0 && (
-          <div style={{ color: "var(--muted)", fontSize: 14, textAlign: "center", margin: "auto" }}>
-            试试问我 👇（问题会自动路由到对应 Agent）
+      <div className="content">
+        <div className="card" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 200px)", padding: 0, overflow: "hidden" }}>
+          <div className="ch" style={{ padding: "16px 18px" }}>
+            <h3>🧚 觅客精灵 · 副驾</h3>
+            <span className="badge violet">4 个 Agent 协同</span>
           </div>
-        )}
-        {messages.map((m, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: m.role === "user" ? "flex-end" : "flex-start", gap: 4 }}>
-            {m.role === "ai" && m.agent && (
-              <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>{AGENT_LABEL[m.agent] || m.agent}</span>
+          <div className="body" style={{ flex: 1 }}>
+            {messages.length === 0 && (
+              <div className="msg ai">
+                <div className="who">觅客精灵 · 副驾</div>
+                你好，承泽。随时问我——查数据、出方案、做复盘，我会自动路由到对应的 Agent。
+              </div>
             )}
-            <div
-              style={{
-                maxWidth: "82%",
-                padding: "10px 14px",
-                borderRadius: 14,
-                fontSize: 14,
-                lineHeight: 1.6,
-                whiteSpace: "pre-wrap",
-                background: m.role === "user" ? "var(--primary)" : "var(--bg)",
-                color: m.role === "user" ? "#fff" : "var(--ink)",
-              }}
-            >
-              {m.text}
-            </div>
+            {messages.map((m, i) => (
+              <div key={i} className={`msg ${m.role === "user" ? "me" : "ai"}`}>
+                {m.role === "ai" && m.agent && <div className="who">{AGENT_LABEL[m.agent] || m.agent}</div>}
+                {m.text}
+              </div>
+            ))}
+            {loading && (
+              <div className="msg ai">
+                <div className="typing"><i /><i /><i /></div>
+              </div>
+            )}
           </div>
-        ))}
-        {loading && <div style={{ color: "var(--muted)", fontSize: 13 }}>思考中…</div>}
-      </div>
-
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "12px 0" }}>
-        {SUGGESTIONS.map((s) => (
-          <button
-            key={s}
-            onClick={() => ask(s)}
-            style={{ border: "1px solid var(--line)", background: "#fff", borderRadius: 999, padding: "6px 12px", fontSize: 12.5, color: "var(--ink)", cursor: "pointer" }}
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-
-      <div style={{ display: "flex", gap: 10 }}>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && ask()}
-          placeholder="问问：今天有什么紧急？帮我找新客户 / 最近行业有什么变化"
-          style={{ flex: 1, height: 44, border: "1px solid var(--line)", borderRadius: 999, padding: "0 16px", fontSize: 14, outline: "none" }}
-        />
-        <button
-          onClick={() => ask()}
-          disabled={loading}
-          style={{ height: 44, padding: "0 22px", borderRadius: 999, border: "none", background: "var(--primary)", color: "#fff", fontSize: 14, cursor: "pointer" }}
-        >
-          {loading ? "…" : "发送"}
-        </button>
+          <div className="chips">
+            {SUGGESTIONS.map((s) => (
+              <button key={s} className="chip" onClick={() => ask(s)}>{s}</button>
+            ))}
+          </div>
+          <div className="foot">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && ask()}
+              placeholder="问问：今天有什么紧急？帮我找新客户 / 最近行业有什么变化"
+            />
+            <button onClick={() => ask()} disabled={loading}>{loading ? "…" : "➤"}</button>
+          </div>
+        </div>
       </div>
     </div>
   );

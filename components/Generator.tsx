@@ -7,7 +7,7 @@ export default function Generator({
   accountId,
   label = "✨ 一键生成",
 }: {
-  type: "copy" | "research" | "proposal" | "report";
+  type: "copy" | "research" | "proposal" | "report" | "diagnose";
   context: string;
   accountId?: string | number;
   label?: string;

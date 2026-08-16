@@ -6,72 +6,97 @@ function num(v: unknown, d = 0): number {
   return isNaN(n) ? d : n;
 }
 
+const TRACK_COLORS = ["var(--accent)", "var(--violet)", "var(--terra)", "var(--lav)", "var(--deep)"];
+
 export default async function IndustryPage() {
   const [bench, events] = await Promise.all([getIndustryBenchmark(), getEvents()]);
   const total = bench.reduce((s, b) => s + num(b.consumption), 0) || 1;
+  const sorted = [...bench].sort((a, b) => num(b.consumption) - num(a.consumption));
+
+  const insights = [
+    { cat: "政策", c: "blue", t: "成人高考 8 月报名季开启，咨询量周环比 +41%", d: "→ 考公考编 / 学历提升赛道进入投放窗口" },
+    { cat: "竞品", c: "terra", t: "竞品「高顿」小红书搜索词新增「AI 会计证」", d: "→ 建议职业教育客户跟进该词" },
+    { cat: "热点", c: "violet", t: "#考研倒计时 话题阅读破 3.2 亿", d: "→ 考研冲刺课种草窗口开启" },
+    { cat: "平台", c: "ok", t: "小红书内测「教育行业搜索品专」", d: "→ 高预算客户可优先申请，抢占搜索首位" },
+  ];
 
   return (
     <div>
-      <div className="card-head" style={{ marginBottom: 18 }}>
-        <h1 style={{ margin: 0, fontSize: 22, color: "var(--ink)" }}>行业大盘 · 动态</h1>
-        <span className="badge">竞品行业监测 Agent</span>
-      </div>
+      <header className="topbar">
+        <div><h1>行业大盘</h1></div>
+        <div className="search">🔍<input placeholder="Ask anything" /></div>
+      </header>
 
-      <div className="card">
-        <div className="card-head"><h3>各赛道昨日大盘消耗</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>单位：万元</span></div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {bench.map((b, i) => {
-            const pct = (num(b.consumption) / total) * 100;
-            const wow = num(b.wow);
-            return (
-              <div key={i}>
-                <div className="barrow">
-                  <span className="lbl">{String(b.track)}</span>
-                  <span className="val">{(num(b.consumption) / 10000).toFixed(0)}万</span>
-                  <span className="lbl">成本</span>
-                  <span className="val">{String(b.lead_cost)}</span>
-                  <span className={wow >= 0 ? "tag ok" : "tag danger"} style={{ fontSize: 11 }}>
-                    环比 {wow >= 0 ? "+" : ""}{(wow * 100).toFixed(1)}%
-                  </span>
-                  <span style={{ color: "var(--muted)", fontSize: 12 }}>热度 {"🔥".repeat(num(b.heat))}</span>
-                </div>
-                <div className="bar">
-                  <span style={{ width: `${pct}%`, background: i % 2 ? "#6366f1" : "#f97316" }} />
+      <div className="content">
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div className="ch"><h3>各赛道昨日大盘消耗</h3><span className="badge violet">竞品行业监测 Agent</span></div>
+          <div className="compo-bar" style={{ height: 14 }}>
+            {sorted.map((b, i) => (
+              <i key={i} style={{ width: `${(num(b.consumption) / total) * 100}%`, background: TRACK_COLORS[i % TRACK_COLORS.length] }} />
+            ))}
+          </div>
+          <div className="legend" style={{ marginTop: 12 }}>
+            {sorted.map((b, i) => (
+              <span key={i} style={{ color: TRACK_COLORS[i % TRACK_COLORS.length] }}>
+                {String(b.track)} {Math.round((num(b.consumption) / total) * 100)}%
+              </span>
+            ))}
+          </div>
+          <table className="table" style={{ fontSize: 13, marginTop: 16 }}>
+            <thead><tr><th>赛道</th><th>消耗</th><th>大盘留资成本</th><th>环比</th><th>热度</th></tr></thead>
+            <tbody>
+              {sorted.map((b, i) => {
+                const wow = num(b.wow);
+                return (
+                  <tr key={i}>
+                    <td className="strong">{String(b.track)}</td>
+                    <td>¥{Math.round(num(b.consumption) / 10000)}万</td>
+                    <td>¥{String(b.lead_cost)}</td>
+                    <td className={`delta ${wow >= 0 ? "up" : "down"}`}>{wow >= 0 ? "▲" : "▼"}{Math.abs(wow * 100).toFixed(0)}%</td>
+                    <td>{"🔥".repeat(num(b.heat) || 1)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="grid cols-2">
+          <div className="card">
+            <div className="ch"><h3>关键事件 / 节点</h3><span className="badge">{events.length} 条</span></div>
+            {events.length === 0 ? (
+              <div className="empty">暂无事件</div>
+            ) : (
+              <div className="tl">
+                {events
+                  .slice()
+                  .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+                  .map((e, i) => (
+                    <div className="it" key={i}>
+                      <div className="dot violet" />
+                      <div className="tx">
+                        <div className="t">{String(e.date)} · {String(e.type)}：{String(e.title)}</div>
+                        <div className="d">{String(e.related_account)} · {String(e.note)}</div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          <div className="card">
+            <div className="ch"><h3>⚡ 行业动态洞察</h3><span className="badge violet">实时</span></div>
+            {insights.map((h, i) => (
+              <div className="news" key={i}>
+                <span className={`badge ${h.c}`}>{h.cat}</span>
+                <div>
+                  <div className="t">{h.t}</div>
+                  <div className="d">{h.d}</div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
-      </div>
-
-      <div className="card" style={{ marginTop: 18 }}>
-        <div className="card-head"><h3>关键事件 / 节点</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>共 {events.length} 条</span></div>
-        {events.length === 0 ? (
-          <div className="empty">暂无事件</div>
-        ) : (
-          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 10, fontSize: 13.5, lineHeight: 1.6 }}>
-            {events
-              .slice()
-              .sort((a, b) => String(b.date).localeCompare(String(a.date)))
-              .map((e, i) => (
-                <li key={i}>
-                  <b style={{ color: "var(--ink)" }}>{String(e.date)}</b> ｜ {String(e.type)}：{String(e.title)}
-                  <div style={{ color: "var(--muted)", fontSize: 12.5, marginTop: 2 }}>
-                    {String(e.related_account)} · {String(e.note)}
-                  </div>
-                </li>
-              ))}
-          </ul>
-        )}
-      </div>
-
-      <div className="card" style={{ marginTop: 18 }}>
-        <div className="card-head"><h3>行业动态洞察</h3></div>
-        <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 8, fontSize: 13.5, color: "var(--ink)", lineHeight: 1.6 }}>
-          <li>教育行业 Q3 信息流 CPM 环比 -6%，预算可多铺 1 个在投计划</li>
-          <li>竞品「职上」新上『0 元试学』落地页，留资成本下降约 18%</li>
-          <li>小红书新增『本地生活教育』流量池，兴趣教育获量红利期</li>
-        </ul>
       </div>
     </div>
   );

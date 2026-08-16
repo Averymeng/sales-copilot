@@ -8,8 +8,8 @@ function heatDots(h: unknown) {
 }
 function statusTag(s: unknown) {
   const v = String(s || "");
-  if (v.includes("已转")) return <span className="tag ok">{v}</span>;
-  return <span className="tag warn">{v}</span>;
+  if (v.includes("已转")) return <span className="badge ok">{v}</span>;
+  return <span className="badge terra">{v}</span>;
 }
 
 export default async function LeadsPage() {
@@ -21,52 +21,55 @@ export default async function LeadsPage() {
 
   return (
     <div>
-      <div className="card-head" style={{ marginBottom: 18 }}>
-        <h1 style={{ margin: 0, fontSize: 22, color: "var(--ink)" }}>商机线索 · 新客开拓</h1>
-        <span className="badge">{leads.length} 条 · 已转 {converted}</span>
-      </div>
+      <header className="topbar">
+        <div><h1>新客开拓</h1></div>
+        <div className="search">🔍<input placeholder="Ask anything" /></div>
+      </header>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {leads.map((l, i) => {
-          const lid = String(l.id);
-          const hasReport = l.research_report && String(l.research_report).trim().length > 0;
-          const ctx = [
-            `线索：${l.name}`,
-            `赛道：${l.track}　产品：${l.product}`,
-            `预算预估：${l.budget_est} 元　热度：${heatDots(l.heat)}`,
-            `信号：${l.signal}`,
-            l.source_url ? `来源：${l.source_url}` : "",
-            l.account_id ? `关联客户：${nameOf[String(l.account_id)] ?? l.account_id}` : "（尚未转化）",
-          ].filter(Boolean).join("\n");
-          return (
-            <div className="card" key={i}>
-              <div className="card-head">
-                <div>
-                  <h3 style={{ margin: 0 }}>{String(l.name)} <span style={{ fontSize: 13 }}>{heatDots(l.heat)}</span></h3>
-                  <span style={{ fontSize: 12, color: "var(--muted)" }}>
-                    {String(l.track)} · {String(l.product)} · 预算 {String(l.budget_est)}
-                  </span>
+      <div className="content">
+        <div className="toolbar" style={{ marginBottom: 18 }}>
+          <span className="badge blue">共 {leads.length} 条线索</span>
+          <span className="badge ok">已转化 {converted}</span>
+          <span className="badge terra">商机发现 Agent 实时捕获</span>
+        </div>
+
+        <div className="grid cols-2">
+          {leads.map((l, i) => {
+            const hasReport = l.research_report && String(l.research_report).trim().length > 0;
+            const ctx = [
+              `线索：${l.name}`,
+              `赛道：${l.track}　产品：${l.product}`,
+              `预算预估：${l.budget_est} 元　热度：${heatDots(l.heat)}`,
+              `信号：${l.signal}`,
+              l.source_url ? `来源：${l.source_url}` : "",
+              l.account_id ? `关联客户：${nameOf[String(l.account_id)] ?? l.account_id}` : "（尚未转化）",
+            ].filter(Boolean).join("\n");
+            return (
+              <div className="card" key={i}>
+                <div className="ch">
+                  <h3>{String(l.name)} <span style={{ fontSize: 13 }}>{heatDots(l.heat)}</span></h3>
+                  {statusTag(l.status)}
                 </div>
-                {statusTag(l.status)}
+                <div className="note" style={{ marginTop: -6 }}>
+                  {String(l.track)} · {String(l.product)} · 预算预估 {String(l.budget_est)}
+                </div>
+                <div className="diag terra" style={{ marginTop: 12 }}>
+                  🔥 信号：{String(l.signal || "—")}
+                </div>
+                {hasReport ? (
+                  <div style={{ marginTop: 12 }}>
+                    <div className="ch" style={{ marginTop: 4 }}><h3 style={{ fontSize: 14 }}>AI 调研报告</h3><span className="badge blue">商机发现 Agent</span></div>
+                    <div className="gen-out" style={{ marginTop: 8 }}>{String(l.research_report)}</div>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 12 }}>
+                    <Generator type="research" context={ctx} label="✨ 一键生成调研报告" />
+                  </div>
+                )}
               </div>
-
-              <div style={{ background: "#FFF8F1", border: "1px solid #FBE5CF", borderRadius: 10, padding: "10px 12px", fontSize: 13, color: "var(--ink)", marginTop: 4 }}>
-                🔥 信号：{String(l.signal || "—")}
-              </div>
-
-              {hasReport ? (
-                <div style={{ marginTop: 12 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--primary)", marginBottom: 6 }}>AI 调研报告</div>
-                  <div className="gen-out" style={{ marginTop: 0 }}>{String(l.research_report)}</div>
-                </div>
-              ) : (
-                <div style={{ marginTop: 12 }}>
-                  <Generator type="research" context={ctx} label="✨ 一键生成调研报告" />
-                </div>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

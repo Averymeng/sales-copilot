@@ -1,0 +1,141 @@
+/* =========================================================
+   觅客精灵 · 补充样式（页面级组件 + 兼容别名）
+   基于 preview/styles.css 设计规范，仅在 Next.js 中需补充的部分
+   ========================================================= */
+
+:root {
+  /* 兼容别名：旧页面/组件可能用到 */
+  --primary: var(--accent);
+  --primary-soft: var(--accent-soft);
+  --body: var(--text-2);
+  --muted: var(--text-3);
+  --line: var(--border);
+  --card: var(--surface);
+}
+
+/* ===== 首页：早报 brief 卡 ===== */
+.brief-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.brief {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 16px 18px; border-radius: var(--r-md);
+  background: var(--surface); border: 1px solid var(--border); transition: .18s;
+}
+.brief:hover { border-color: var(--border-2); box-shadow: var(--sh-1); }
+.brief .b-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.brief .b-lbl { font-size: 12px; color: var(--text-3); font-weight: 500; }
+.brief .b-val { font-size: 26px; font-weight: 720; letter-spacing: -.03em; line-height: 1; }
+.brief .b-val .u { font-size: 16px; font-weight: 600; color: var(--text-3); }
+.brief .b-delta { font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; }
+.brief .b-delta.up { color: var(--ok); }
+.brief .b-delta.down { color: var(--danger); }
+.brief .b-delta.flat { color: var(--text-3); }
+.brief .b-note { font-size: 12px; color: var(--text-3); margin-top: 6px; line-height: 1.5; }
+
+/* ===== 首页：我的业绩 ===== */
+.perf .seg-meta { font-size: 12px; color: var(--text-3); font-weight: 600; }
+.perf .seg-meta b { font-weight: 700; }
+.perf-top { display: flex; align-items: center; gap: 18px; margin-bottom: 18px; }
+.ring { position: relative; width: 118px; height: 118px; flex: none; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring .bg { fill: none; stroke: var(--surface-3); stroke-width: 9; }
+.ring .arc { fill: none; stroke: var(--accent); stroke-width: 9; stroke-linecap: round; }
+.ring .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring .center .pct { font-size: 25px; font-weight: 720; letter-spacing: -.03em; }
+.ring .center .lbl { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.perf-stats { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; min-width: 0; }
+.perf-stats .ps { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.perf-stats .ps .lbl { font-size: 12px; color: var(--text-3); }
+.perf-stats .ps .val { font-size: 20px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.compo { margin-top: 4px; }
+.compo-bar { display: flex; height: 9px; border-radius: var(--r-pill); overflow: hidden; }
+.compo-bar i { display: block; height: 100%; }
+.compo .legend { margin-top: 10px; }
+.perf-foot { display: flex; align-items: baseline; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.perf-foot b { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.legend span { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-2); }
+.legend span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; flex: none; background: currentColor; }
+
+/* ===== 首页：实时热点 news ===== */
+.news { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid var(--border); }
+.news:first-child { border-top: none; }
+.news .t { font-weight: 600; color: var(--ink); font-size: 13px; }
+.news .d { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+
+/* ===== 我的客户：row 列表 ===== */
+.row { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: none; }
+.row .av-sq { background: linear-gradient(135deg, var(--accent), var(--violet)); color: #fff; font-weight: 700; flex: none; }
+.row .info { flex: 1; min-width: 0; }
+.row .nm { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row .sb { font-size: 12px; color: var(--text-3); }
+.row .num { font-size: 13px; color: var(--text-2); min-width: 92px; }
+.row .num b { color: var(--ink); font-size: 15px; }
+.row .acts { display: flex; gap: 8px; flex: none; }
+.health { font-size: 12px; font-weight: 600; min-width: 72px; }
+.health.ok { color: var(--ok); }
+.health.warn { color: var(--terra); }
+
+/* ===== 客户投放：素材卡 / 趋势 / 小饼 ===== */
+.mat-card { display: flex; gap: 14px; padding: 14px; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); transition: box-shadow .15s, transform .15s; margin-bottom: 12px; }
+.mat-card:hover { box-shadow: var(--sh-2); transform: translateY(-1px); }
+.mat-cover { width: 120px; height: 160px; border-radius: 10px; flex: none; display: grid; place-items: center; color: #fff; position: relative; overflow: hidden; }
+.mat-cover .tag { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 700; background: rgba(0,0,0,.35); color: #fff; padding: 3px 8px; border-radius: 999px; backdrop-filter: blur(4px); }
+.mat-cover .tt { font-size: 15px; font-weight: 800; text-shadow: 0 1px 6px rgba(0,0,0,.35); line-height: 1.25; text-align: center; padding: 8px; }
+.mat-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.mat-info .t { font-weight: 700; font-size: 14px; }
+.mat-info .d { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+.mat-stats { display: flex; gap: 12px; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); }
+.mat-stats .ms { font-size: 12px; color: var(--text-2); }
+.mat-stats .ms b { font-size: 15px; color: var(--ink); }
+
+.trend-bar { display: flex; align-items: flex-end; gap: 5px; height: 60px; padding-top: 10px; }
+.trend-bar i { flex: 1; border-radius: 4px 4px 0 0; background: var(--accent-soft); min-height: 8px; position: relative; }
+.trend-bar i.f { background: linear-gradient(180deg, var(--violet), var(--accent)); }
+.trend-bar i .tv { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--text-3); white-space: nowrap; text-align: center; }
+
+.pie-sm { width: 80px; height: 80px; position: relative; flex: none; }
+.pie-sm svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.pie-sm .bg { fill: none; stroke: var(--surface-3); stroke-width: 8; }
+.pie-sm .fg { fill: none; stroke-width: 8; stroke-linecap: round; }
+.pie-sm .ctr { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; font-weight: 700; }
+
+.act-bar { display: flex; align-items: center; gap: 10px; margin-left: auto; flex: none; }
+
+/* ===== 通用 delta（表格内涨幅） ===== */
+.delta { font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.delta.up { color: var(--ok); }
+.delta.down { color: var(--danger); }
+.delta.flat { color: var(--text-3); }
+
+/* ===== 通用 tag ===== */
+.tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--surface-3); color: var(--text-2); }
+
+/* ===== AI 调研报告 pts ===== */
+.pt { display: flex; gap: 8px; font-size: 13px; color: var(--text-2); }
+.pt b { color: var(--ink); flex: none; }
+
+/* ===== 空状态（覆盖基础 .empty） ===== */
+.empty { text-align: center; padding: 54px 20px; }
+.empty .e-ico { width: 56px; height: 56px; border-radius: 16px; background: var(--surface-3); display: grid; place-items: center; margin: 0 auto 16px; font-size: 26px; }
+.empty h3 { font-size: 17px; margin-bottom: 8px; }
+.empty p { color: var(--text-2); font-size: 13px; max-width: 360px; margin: 0 auto 18px; line-height: 1.7; }
+
+/* ===== 兼容：旧类名 ===== */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 880px) { .grid2, .split, .brief-row { grid-template-columns: 1fr; } }
+
+/* ===== AI 生成输出块 ===== */
+.gen-out {
+  margin-top: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
