@@ -1,14 +1,14 @@
-# —— 密钥 / 环境变量（绝不入库）——
+# dependencies
+node_modules/
+
+# next.js build output
+.next/
+out/
+
+# env (含密钥，禁止提交)
 .env.local
-.env
-.env.*
-!.env.example
+.env*.local
 
-# —— 系统文件 ——
+# misc
 .DS_Store
-*~
-
-# —— 临时/回收文件 ——
-.~*
-*.tmp
-__pycache__/
+*.log
