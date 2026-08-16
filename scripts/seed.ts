@@ -55,6 +55,12 @@ async function main() {
       console.log(`✓ ${table}: ${rows.length} 行`);
     }
   });
+  // 3) 重置各表 SERIAL 序列到 MAX(id)+1（显式插入 id 不会推进序列，否则后续自动插入会主键冲突）
+  for (const table of TABLES) {
+    await sql.unsafe(
+      `SELECT setval(pg_get_serial_sequence('"${table}"','id'), GREATEST((SELECT MAX(id) FROM "${table}"), 1), true)`,
+    ).catch(() => {});
+  }
   await sql.end();
   console.log("种子导入完成。");
 }

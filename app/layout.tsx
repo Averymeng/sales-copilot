@@ -13,11 +13,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const source = process.env.DATABASE_URL ? "Neon" : "样本 CSV";
   return (
     <html lang="zh-CN">
       <body>
         <div className="app-shell">
-          <Sidebar />
+          <Sidebar source={source} />
           <main className="main">{children}</main>
         </div>
         <ChatWidget />

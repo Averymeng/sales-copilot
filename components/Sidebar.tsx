@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NAV = [
   { href: "/", label: "首页" },
@@ -13,18 +15,22 @@ const NAV = [
   { href: "/reports", label: "报告" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ source }: { source: string }) {
+  const path = usePathname();
   return (
     <aside className="sidebar">
       <div className="brand">觅客精灵</div>
-      {NAV.map((n) => (
-        <Link key={n.href} href={n.href} className="nav-item">
-          {n.label}
-        </Link>
-      ))}
+      {NAV.map((n) => {
+        const active = n.href === "/" ? path === "/" : path.startsWith(n.href);
+        return (
+          <Link key={n.href} href={n.href} className={`nav-item${active ? " active" : ""}`}>
+            {n.label}
+          </Link>
+        );
+      })}
       <div className="nav-sep" />
       <div className="nav-item" style={{ color: "var(--muted)", fontSize: 12 }}>
-        运行态：{process.env.DATABASE_URL ? "Neon" : "样本 CSV"}
+        运行态：{source}
       </div>
     </aside>
   );

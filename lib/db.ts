@@ -48,6 +48,33 @@ async function pgQuery(table: string): Promise<Row[]> {
   return rows;
 }
 
+// 通用写入（仅 Neon）：返回新行 id；无 DATABASE_URL 时跳过。
+export async function insertRow(table: string, values: Record<string, unknown>): Promise<number> {
+  if (!process.env.DATABASE_URL) {
+    console.warn(`[db] 未配置 DATABASE_URL，跳过写入 ${table}`);
+    return -1;
+  }
+  const ready = pgClient();
+  if (!ready || !_sql) return -1;
+  await ready;
+  const name = pgTable(table);
+  const cols = Object.keys(values);
+  if (cols.length === 0) return -1;
+  const colsSql = cols.map((c) => `"${c}"`).join(", ");
+  const placeholders = cols.map((_, i) => `$${i + 1}`).join(", ");
+  const vals = cols.map((c) => values[c]);
+  try {
+    const res = (await (_sql as any).unsafe(
+      `insert into "${name}" (${colsSql}) values (${placeholders}) returning id`,
+      vals,
+    )) as Row[];
+    return Number(res?.[0]?.id ?? -1);
+  } catch (e) {
+    console.warn(`[db] 写入 ${table} 失败:`, (e as Error).message);
+    return -1;
+  }
+}
+
 // postgres 表名需作为标识符；这里所有表名均来自白名单，安全。
 function pgTable(name: string): any {
   const allowed = new Set([
@@ -101,6 +128,24 @@ export async function getFollowups() {
 }
 export async function getEvents() {
   return read("events");
+}
+export async function getIndustryBenchmark() {
+  return read("industry_benchmark");
+}
+export async function getKnowledgeBase() {
+  return read("knowledge_base");
+}
+export async function getKnowledgePersonal() {
+  return read("knowledge_personal");
+}
+export async function getProposals() {
+  return read("proposals");
+}
+export async function getReports() {
+  return read("reports");
+}
+export async function getCampaignMetrics() {
+  return read("campaign_metrics_daily");
 }
 
 function s(v: unknown): string {

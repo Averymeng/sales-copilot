@@ -1,4 +1,4 @@
-import { getOverview } from "@/lib/db";
+import { getOverview, getIndustryBenchmark } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 function healthClass(v: unknown): string {
@@ -17,6 +17,7 @@ function urgencyTag(u: unknown) {
 
 export default async function HomePage() {
   const { kpis, accounts, activeCampaigns, todoTasks, leads, runs } = await getOverview();
+  const bench = await getIndustryBenchmark();
 
   // 业绩饼图：在投计划按投放目标分布
   const objMap: Record<string, number> = {};
@@ -53,12 +54,21 @@ export default async function HomePage() {
     { k: "本周 Agent 运行", v: `${kpis.runs} 次`, c: "ok" },
   ];
 
-  // 行业动态（占位：由行业监测 Agent 每日生成，这里给示例）
-  const industry = [
-    "教育行业 Q3 信息流 CPM 环比 -6%，预算可多铺 1 个在投计划",
-    "竞品「职上」新上『0 元试学』落地页，留资成本下降约 18%",
-    "小红书新增『本地生活教育』流量池，兴趣教育获量红利期",
-  ];
+  // 行业动态（数据驱动：来自 industry_benchmark 赛道大盘）
+  const industry =
+    bench.length > 0
+      ? bench
+          .slice()
+          .sort((a, b) => Number(b.consumption) - Number(a.consumption))
+          .map(
+            (b) =>
+              `${b.track}昨日大盘消耗 ${(Number(b.consumption) / 10000).toFixed(0)} 万，留资成本 ${b.lead_cost} 元，环比 ${Number(b.wow) >= 0 ? "+" : ""}${(Number(b.wow) * 100).toFixed(1)}%，热度 ${"🔥".repeat(Number(b.heat) || 1)}`,
+          )
+      : [
+          "教育行业 Q3 信息流 CPM 环比 -6%，预算可多铺 1 个在投计划",
+          "竞品「职上」新上『0 元试学』落地页，留资成本下降约 18%",
+          "小红书新增『本地生活教育』流量池，兴趣教育获量红利期",
+        ];
 
   return (
     <div>
