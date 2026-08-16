@@ -32,6 +32,10 @@
   - 绑定 accounts 表（ID: On6f0fYhTft4GSwsfEJIgN）
   - 实时读取 + 新增客户（db.query / db.addRecord），已通过 SDK lint
   - 源码：`preview/accounts-data.html`
+- **工作台总览（在线页）**：https://www.workbuddy.cn/space/d/I9e07pICJ3BV3N5frgTjJH
+  - 聚合读取 7 张核心表（accounts/campaigns/leads/tasks/contacts/creatives/agent_runs）
+  - KPI 实时统计 + 客户/在投计划/待办/线索列表（db.query）
+  - 源码：`preview/workbench.html`
 
 ## 与本地文件的关系
 

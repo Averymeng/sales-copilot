@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>觅客精灵 · 工作台总览（在线数据）</title>
+<style>
+  :root{
+    --bg:#F6F4F8; --card:#fff; --ink:#06040F; --body:#564B58; --muted:#938BA0;
+    --line:#ECEAF1; --primary:#5B5BD8; --primary-soft:#EEEAFD; --ok:#4FA37A; --warn:#C9893F; --danger:#C75B5B;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--body);font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:1120px;margin:0 auto;padding:32px 24px 64px}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  .top h1{margin:0;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+  .top p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .badge{font-size:11px;color:var(--primary);background:var(--primary-soft);padding:4px 11px;border-radius:999px;white-space:nowrap}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(6,4,15,.03)}
+  .kpi .n{font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:2px}
+  .kpi .n.danger{color:var(--danger)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:0 1px 2px rgba(6,4,15,.03)}
+  .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .ch h3{margin:0;font-size:15px;color:var(--ink)}
+  .ch .sub{font-size:12px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td.strong{font-weight:700;color:var(--ink)}
+  .h-ok{color:var(--ok)} .h-warn{color:var(--warn)} .h-danger{color:var(--danger)}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--primary-soft);color:var(--primary);margin:1px 2px 1px 0}
+  .tag.warn{background:#FBEFE0;color:var(--warn)}
+  .tag.danger{background:#FBE5E5;color:var(--danger)}
+  .tag.ok{background:#E7F4EC;color:var(--ok)}
+  .empty{text-align:center;color:var(--muted);padding:24px}
+  .loading{text-align:center;color:var(--muted);padding:20px}
+  .err{background:#FBE5E5;color:var(--danger);border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+  .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>觅客精灵 · 工作台总览</h1>
+      <p id="sub">数据来自在线资料库 · 实时读取</p>
+    </div>
+    <span class="badge">已联动 Database</span>
+  </div>
+
+  <div id="errBox"></div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi"><div class="n" id="k_acc">–</div><div class="l">客户总数</div></div>
+    <div class="kpi"><div class="n" id="k_camp">–</div><div class="l">在投计划</div></div>
+    <div class="kpi"><div class="n" id="k_lead">–</div><div class="l">线索总数</div></div>
+    <div class="kpi"><div class="n" id="k_task">–</div><div class="l">待办事项</div></div>
+    <div class="kpi"><div class="n danger" id="k_urgent">–</div><div class="l">紧急待办</div></div>
+    <div class="kpi"><div class="n" id="k_contact">–</div><div class="l">关键人数</div></div>
+    <div class="kpi"><div class="n" id="k_creative">–</div><div class="l">素材数</div></div>
+    <div class="kpi"><div class="n" id="k_run">–</div><div class="l">Agent 运行</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="ch"><h3>客户花名册</h3><span class="sub" id="accCount"></span></div>
+      <div id="accList"><div class="loading">加载中…</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>在投投放计划</h3><span class="sub" id="campCount"></span></div>
+      <div id="campList"><div class="loading">加载中…</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="ch"><h3>待办事项</h3><span class="sub" id="taskCount"></span></div>
+      <div id="taskList"><div class="loading">加载中…</div></div>
+    </div>
+    <div class="card">
+      <div class="ch"><h3>最新线索</h3><span class="sub" id="leadCount"></span></div>
+      <div id="leadList"><div class="loading">加载中…</div></div>
+    </div>
+  </div>
+
+  <p class="foot">所有数据实时读取自 workbuddy.cn 资料库（17 张表），可在对应在线表中直接增改。</p>
+</div>
+
+<script>
+(function(){
+  var DB = {
+    accounts:'On6f0fYhTft4GSwsfEJIgN',
+    campaigns:'3W3TWrnpYDqRxvaQIv1dI2',
+    leads:'qWTK4Xla9MSWHfLj0sLMLR',
+    tasks:'PlKutw8pADwt5pydxyj6hy',
+    contacts:'g2npIIvcP425UNMK6AFtbW',
+    creatives:'zkGO0I8OBKExgjq8y3Q4Au',
+    agent_runs:'0iiR55WiNYnJkBW6mHNl4D'
+  };
+
+  function val(v){ if(v&&typeof v==='object'){ if('text' in v) return v.text; if('name' in v) return v.name; } return v==null?'':v; }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function healthClass(v){ v=String(val(v)||''); if(v.indexOf('掉')>=0) return 'h-danger'; if(v.indexOf('预警')>=0||v.indexOf('未')>=0) return 'h-warn'; if(v.indexOf('健康')>=0) return 'h-ok'; return ''; }
+  function tagClass(v){ v=String(val(v)||''); if(v.indexOf('紧急')>=0) return 'danger'; if(v.indexOf('高')>=0) return 'warn'; if(v.indexOf('投放中')>=0||v.indexOf('健康')>=0) return 'ok'; return ''; }
+  function table(head, rows, cols){
+    if(!rows.length) return '<div class="empty">暂无数据</div>';
+    var h='<table><thead><tr>'+head.map(function(x){return '<th>'+x+'</th>';}).join('')+'</tr></thead><tbody>';
+    rows.forEach(function(r){
+      h+='<tr>'+cols.map(function(c){
+        var v=val(r[c.k]); var cls=c.cls?(' '+c.cls(v)):'';
+        if(c.tag) v='<span class="tag '+tagClass(v)+'">'+esc(v)+'</span>';
+        return '<td class="'+(c.strong?'strong':'')+cls+'">'+esc(v)+'</td>';
+      }).join('')+'</tr>';
+    });
+    return h+'</tbody></table>';
+  }
+
+  var SP = window.__SMART_PAGE__;
+  if(!SP || !SP.database){
+    document.getElementById('sub').textContent='请在资料库在线页打开以加载实时数据';
+    document.getElementById('errBox').innerHTML='<div class="err">当前页面未连接到资料库运行时。请将本页通过「资料库」发布到 workbuddy.cn 空间后，在在线页中查看实时数据。</div>';
+    ['accList','campList','taskList','leadList'].forEach(function(id){document.getElementById(id).innerHTML='<div class="empty">需在线环境</div>';});
+    return;
+  }
+  var db = SP.database;
+
+  function q(id){ return db.query({ databaseId:id, pageSize:200 }); }
+
+  Promise.all([
+    q(DB.accounts), q(DB.campaigns), q(DB.leads), q(DB.tasks), q(DB.contacts), q(DB.creatives), q(DB.agent_runs)
+  ]).then(function(res){
+    var acc=res[0].results||[], camp=res[1].results||[], lead=res[2].results||[], task=res[3].results||[], contact=res[4].results||[], creative=res[5].results||[], run=res[6].results||[];
+    var accName={}; acc.forEach(function(a){ accName[val(a.id)]=val(a.name); });
+
+    document.getElementById('k_acc').textContent=acc.length;
+    document.getElementById('k_camp').textContent=camp.filter(function(c){return String(val(c.status)).indexOf('投放中')>=0;}).length;
+    document.getElementById('k_lead').textContent=lead.length;
+    document.getElementById('k_task').textContent=task.filter(function(t){return String(val(t.status)).indexOf('待办')>=0;}).length;
+    document.getElementById('k_urgent').textContent=task.filter(function(t){return String(val(t.urgency)).indexOf('紧急')>=0;}).length;
+    document.getElementById('k_contact').textContent=contact.length;
+    document.getElementById('k_creative').textContent=creative.length;
+    document.getElementById('k_run').textContent=run.length;
+
+    document.getElementById('accCount').textContent='共 '+acc.length+' 家';
+    document.getElementById('accList').innerHTML=table(
+      ['客户','赛道','阶段','消耗(万)','健康度'], acc,
+      [{k:'name',strong:true},{k:'track'},{k:'stage'},{k:'spend'},{k:'health',cls:healthClass}]
+    );
+
+    var camps=camp.filter(function(c){return String(val(c.status)).indexOf('投放中')>=0;});
+    document.getElementById('campCount').textContent='共 '+camps.length+' 个';
+    document.getElementById('campList').innerHTML=renderCamp(camps, accName);
+
+    var tasks=task.filter(function(t){return String(val(t.status)).indexOf('待办')>=0;});
+    document.getElementById('taskCount').textContent='共 '+tasks.length+' 项';
+    document.getElementById('taskList').innerHTML=table(
+      ['待办','紧急度','截止','来源'], tasks,
+      [{k:'title',strong:true},{k:'urgency',tag:true},{k:'deadline'},{k:'source'}]
+    );
+
+    document.getElementById('leadCount').textContent='共 '+lead.length+' 条';
+    document.getElementById('leadList').innerHTML=table(
+      ['线索','赛道','状态'], lead.slice(0,8),
+      [{k:'name',strong:true},{k:'track'},{k:'status',tag:true}]
+    );
+  }).catch(function(err){
+    console.error('[database] 读取失败:',err);
+    document.getElementById('errBox').innerHTML='<div class="err">读取资料库失败：'+(err&&err.message?err.message:err)+'</div>';
+  });
+
+  function renderCamp(rows, accName){
+    if(!rows.length) return '<div class="empty">暂无在投计划</div>';
+    var h='<table><thead><tr><th>计划</th><th>客户</th><th>目标</th><th>状态</th></tr></thead><tbody>';
+    rows.forEach(function(r){
+      h+='<tr><td class="strong">'+esc(val(r.name))+'</td><td>'+esc(accName[val(r.account_id)]||val(r.account_id))+'</td>'
+        +'<td><span class="tag">'+esc(val(r.objective))+'</span></td><td><span class="tag ok">'+esc(val(r.status))+'</span></td></tr>';
+    });
+    return h+'</tbody></table>';
+  }
+})();
+</script>
+</body>
+</html>
