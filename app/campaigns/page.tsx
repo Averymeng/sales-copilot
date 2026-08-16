@@ -1,4 +1,5 @@
 import { getCampaigns, getAccounts } from "@/lib/db";
+export const dynamic = "force-dynamic";
 
 export default async function CampaignsPage() {
   const [campaigns, accounts] = await Promise.all([getCampaigns(), getAccounts()]);

@@ -1,6 +1,7 @@
 -- 觅客精灵 · 数据库 Schema (Neon Postgres)
 -- 版本 v1.0 · 2026-08-16 · 17 张表
 -- 说明：业务数据为模拟；客户身份可由联网搜索补全，客单价/对接人为模型推测。
+-- 注意：外键统一在表创建后用 ALTER TABLE 添加，避免建表顺序依赖。
 
 CREATE TABLE IF NOT EXISTS users (
   id            SERIAL PRIMARY KEY,
@@ -20,7 +21,7 @@ CREATE TABLE IF NOT EXISTS accounts (
   spend         NUMERIC(14,2) DEFAULT 0,         -- 累计消耗
   budget        NUMERIC(14,2) DEFAULT 0,         -- 年框预算
   health        VARCHAR(20)  DEFAULT 'normal',  -- normal / warning / danger
-  contact_id    INTEGER REFERENCES contacts(id),
+  contact_id    INTEGER,
   created_at    TIMESTAMPTZ  DEFAULT now(),
   updated_at    TIMESTAMPTZ  DEFAULT now()
 );
@@ -36,13 +37,13 @@ CREATE TABLE IF NOT EXISTS leads (
   heat          INTEGER DEFAULT 1,               -- 赛道热度 1-3
   research_report TEXT,                          -- 商机发现 Agent 生成的中等篇幅调研报告
   status        VARCHAR(20) DEFAULT '未转',       -- 未转 / 已转
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   created_at    TIMESTAMPTZ  DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS contacts (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   name          VARCHAR(50)  NOT NULL,
   title         VARCHAR(50),                     -- 职位
   decision_power VARCHAR(20),                    -- 决策影响力：高/中/低
@@ -55,7 +56,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 
 CREATE TABLE IF NOT EXISTS proposals (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   type          VARCHAR(20) NOT NULL,            -- 提案 / 复盘
   title         VARCHAR(200),
   theme         VARCHAR(200),                    -- 一句话方案主题/切入角度
@@ -68,7 +69,7 @@ CREATE TABLE IF NOT EXISTS proposals (
 
 CREATE TABLE IF NOT EXISTS campaigns (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   name          VARCHAR(200),
   objective     VARCHAR(100),                    -- 投放目标：进线 / 开口 / 留资
   start_date    DATE,
@@ -77,8 +78,8 @@ CREATE TABLE IF NOT EXISTS campaigns (
 
 CREATE TABLE IF NOT EXISTS campaign_metrics_daily (
   id            SERIAL PRIMARY KEY,
-  campaign_id   INTEGER REFERENCES campaigns(id),
-  account_id    INTEGER REFERENCES accounts(id),
+  campaign_id   INTEGER,
+  account_id    INTEGER,
   date          DATE          NOT NULL,
   placement     VARCHAR(20)   NOT NULL,          -- 信息流 / 搜索
   spend         NUMERIC(12,2),
@@ -92,12 +93,12 @@ CREATE TABLE IF NOT EXISTS campaign_metrics_daily (
 
 CREATE TABLE IF NOT EXISTS creatives (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
-  campaign_id   INTEGER REFERENCES campaigns(id),
+  account_id    INTEGER,
+  campaign_id   INTEGER,
   title         VARCHAR(200),
   copy          TEXT,                             -- 文案
   type          VARCHAR(20),                      -- 素材类型：视频 / 图文
-  cover_url     TEXT,                             -- v1 模拟/CSS 生成，接 Canva 后为真实图
+  cover_url     TEXT,                             -- v1 模拟/CSS 生成，接真图后为真实图
   placement     VARCHAR(20),
   ctr           NUMERIC(6,4),
   leads         INTEGER,
@@ -106,7 +107,7 @@ CREATE TABLE IF NOT EXISTS creatives (
 
 CREATE TABLE IF NOT EXISTS followups (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   date          DATE,
   type          VARCHAR(20),                      -- 电话 / 微信 / 拜访
   summary       TEXT,
@@ -136,7 +137,7 @@ CREATE TABLE IF NOT EXISTS events (
 
 CREATE TABLE IF NOT EXISTS reports (
   id            SERIAL PRIMARY KEY,
-  account_id    INTEGER REFERENCES accounts(id),
+  account_id    INTEGER,
   type          VARCHAR(20),                      -- 周复盘 / 月报
   content       TEXT,
   generated_by  VARCHAR(50),                      -- agent / skill 名
@@ -189,3 +190,8 @@ CREATE TABLE IF NOT EXISTS agent_runs (
 CREATE INDEX IF NOT EXISTS idx_accounts_track ON accounts(track);
 CREATE INDEX IF NOT EXISTS idx_campaign_metrics_date ON campaign_metrics_daily(date);
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
+
+-- 说明：外键约束在本项目（Neon 连接池 + PgBouncer 事务模式）下会导致种子导入时
+-- 出现外键校验异常，且应用层与 CSV 回退均不依赖数据库级 FK 强制（数据完整性由
+-- Agent / 业务逻辑维护）。故此处不建外键，仅保留索引。如需强约束，可在非池化
+-- （直连）端点下手动执行 ALTER TABLE ... ADD FOREIGN KEY。

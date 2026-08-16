@@ -43,7 +43,8 @@ async function pgQuery(table: string): Promise<Row[]> {
   const ready = pgClient();
   if (!ready || !_sql) return [];
   await ready;
-  const rows = (await (_sql as any)`select * from ${pgTable(table)}`) as Row[];
+  const name = pgTable(table); // 已白名单校验，安全作为标识符
+  const rows = (await (_sql as any).unsafe(`select * from "${name}"`)) as Row[];
   return rows;
 }
 

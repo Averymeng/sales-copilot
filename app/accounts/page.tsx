@@ -1,4 +1,5 @@
 import { getAccounts, getContacts, getCampaigns, getFollowups, getEvents } from "@/lib/db";
+export const dynamic = "force-dynamic";
 
 function healthClass(v: unknown): string {
   const s = String(v || "");

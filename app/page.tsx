@@ -1,4 +1,5 @@
 import { getOverview } from "@/lib/db";
+export const dynamic = "force-dynamic";
 
 function healthClass(v: unknown): string {
   const s = String(v || "");
