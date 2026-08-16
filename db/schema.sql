@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS accounts (
   id            SERIAL PRIMARY KEY,
   name          VARCHAR(100) NOT NULL,
-  track         VARCHAR(50)  NOT NULL,          -- 赛道：考公考编/职业教育/语言留学/学历提升
+  track         VARCHAR(50)  NOT NULL,          -- 赛道：考公考编/职业教育/语言留学/学历提升/兴趣教育
   product       VARCHAR(100),                    -- 主营品
   city          VARCHAR(50),
   stage         VARCHAR(20)  NOT NULL DEFAULT '预合作',  -- 预合作 / 已有
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS contacts (
   name          VARCHAR(50)  NOT NULL,
   title         VARCHAR(50),                     -- 职位
   decision_power VARCHAR(20),                    -- 决策影响力：高/中/低
-  comm_style    VARCHAR(50),                     -- 沟通风格
+  comm_channel  VARCHAR(20),                     -- 沟通渠道：微信 / 电话 / 线下
+  comm_style    VARCHAR(20),                     -- 沟通风格：直接 / 温和 / 数据导向
   preference     TEXT,                            -- 偏好
   phone         VARCHAR(30),
   wechat        VARCHAR(50)
@@ -69,7 +70,7 @@ CREATE TABLE IF NOT EXISTS campaigns (
   id            SERIAL PRIMARY KEY,
   account_id    INTEGER REFERENCES accounts(id),
   name          VARCHAR(200),
-  objective     VARCHAR(100),
+  objective     VARCHAR(100),                    -- 投放目标：进线 / 开口 / 留资
   start_date    DATE,
   status        VARCHAR(20) DEFAULT '投放中'       -- 投放中 / 暂停 / 已结束
 );
@@ -95,7 +96,7 @@ CREATE TABLE IF NOT EXISTS creatives (
   campaign_id   INTEGER REFERENCES campaigns(id),
   title         VARCHAR(200),
   copy          TEXT,                             -- 文案
-  cover_style   VARCHAR(50),                      -- v1 样式卡类型
+  type          VARCHAR(20),                      -- 素材类型：视频 / 图文
   cover_url     TEXT,                             -- v1 模拟/CSS 生成，接 Canva 后为真实图
   placement     VARCHAR(20),
   ctr           NUMERIC(6,4),
@@ -120,7 +121,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   urgency       VARCHAR(20) DEFAULT '普通',        -- 紧急 / 节点 / 优化 / 普通
   deadline      DATE,
   status        VARCHAR(20) DEFAULT '待办',         -- 待办 / 完成
-  source        VARCHAR(20) DEFAULT '人工',         -- 人工 / AI生成
+  source        VARCHAR(20) DEFAULT '人工',         -- 人工 / AI监测
   created_at    TIMESTAMPTZ  DEFAULT now()
 );
 

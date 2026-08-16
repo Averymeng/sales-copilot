@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户花名册 · 在线数据</title>
+<style>
+  :root{
+    --bg:#F6F4F8; --card:#fff; --ink:#06040F; --body:#564B58; --muted:#938BA0;
+    --line:#ECEAF1; --primary:#5B5BD8; --primary-soft:#EEEAFD; --ok:#4FA37A; --warn:#C9893F; --danger:#C75B5B;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--body);font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
+  .wrap{max-width:1080px;margin:0 auto;padding:32px 24px 64px}
+  .top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+  .top h1{margin:0;font-size:22px;color:var(--ink);letter-spacing:-.01em}
+  .top p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:0 1px 2px rgba(6,4,15,.03)}
+  .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .ch h3{margin:0;font-size:15px;color:var(--ink)}
+  .badge{font-size:11px;color:var(--primary);background:var(--primary-soft);padding:3px 9px;border-radius:999px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td.strong{font-weight:700;color:var(--ink)}
+  .h-ok{color:var(--ok)} .h-warn{color:var(--warn)} .h-danger{color:var(--danger)}
+  form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end}
+  form .fld{display:flex;flex-direction:column;gap:4px}
+  form label{font-size:11px;color:var(--muted)}
+  form input{height:34px;border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:13px;background:#fff;color:var(--ink)}
+  form input:focus{outline:none;border-color:var(--primary)}
+  .btn{height:34px;padding:0 16px;border-radius:8px;border:none;background:var(--primary);color:#fff;font-size:13px;cursor:pointer}
+  .btn:disabled{opacity:.6;cursor:default}
+  .note{color:var(--muted);font-size:12px;margin-top:8px}
+  .empty{text-align:center;color:var(--muted);padding:30px}
+  .loading{text-align:center;color:var(--muted);padding:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>客户花名册</h1>
+      <p>数据来自在线资料库 · 实时读取，可随时增改</p>
+    </div>
+    <span class="badge">已联动 Database</span>
+  </div>
+
+  <div class="card">
+    <div class="ch"><h3>全部客户</h3><span class="note" id="count"></span></div>
+    <div id="list" data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">
+      <div class="loading">加载中…</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><h3>新增客户</h3></div>
+    <form id="addForm">
+      <div class="fld"><label>客户名</label><input name="name" required placeholder="如 粉笔公考"></div>
+      <div class="fld"><label>赛道</label><input name="track" placeholder="考公考编"></div>
+      <div class="fld"><label>产品</label><input name="product" placeholder="职业/学历"></div>
+      <div class="fld"><label>城市</label><input name="city" placeholder="北京"></div>
+      <div class="fld"><label>阶段</label><input name="stage" placeholder="预合作/已有"></div>
+      <div class="fld"><label>消耗(万)</label><input name="spend" type="number" step="0.1" placeholder="0"></div>
+      <div class="fld"><label>预算(万)</label><input name="budget" type="number" step="0.1" placeholder="0"></div>
+      <div class="fld"><label>健康度</label><input name="health" placeholder="健康/掉量"></div>
+      <button class="btn" type="submit" style="grid-column:1/2">+ 添加</button>
+    </form>
+    <p class="note">提交即写入在线资料库，列表自动刷新。</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var db = window.__SMART_PAGE__.database;
+  var DATABASE_ID = 'On6f0fYhTft4GSwsfEJIgN';
+  var SCHEMA_OPTIONS = {};
+  var listEl = document.getElementById('list');
+  var countEl = document.getElementById('count');
+
+  db.getSchema({ databaseId: DATABASE_ID }).then(function(schema){
+    (schema.properties||[]).forEach(function(f){
+      if((f.type==='select'||f.type==='multi_select')&&f.config&&f.config.options){
+        SCHEMA_OPTIONS[f.name]=f.config.options;
+      }
+    });
+    loadData();
+  }).catch(function(err){ console.error('[database] schema 失败:',err); loadData(); });
+
+  function loadData(){
+    db.query({ databaseId: DATABASE_ID, pageSize: 100 }).then(function(result){
+      renderData(result.results||[]);
+    }).catch(function(err){ console.error('[database] 读取失败:',err); listEl.innerHTML='<div class="empty">读取失败，请稍后重试</div>'; });
+  }
+
+  function healthClass(v){
+    v=(v||'').toString();
+    if(v.indexOf('掉')>=0) return 'h-danger';
+    if(v.indexOf('预警')>=0||v.indexOf('未')>=0) return 'h-warn';
+    if(v.indexOf('健康')>=0) return 'h-ok';
+    return '';
+  }
+
+  function renderData(rows){
+    if(!rows.length){ listEl.innerHTML='<div class="empty">暂无客户，请在下方添加</div>'; countEl.textContent=''; return; }
+    countEl.textContent='共 '+rows.length+' 个客户';
+    var html='<table><thead><tr>'
+      +'<th>客户</th><th>赛道</th><th>产品</th><th>城市</th><th>阶段</th><th>消耗(万)</th><th>预算(万)</th><th>健康度</th>'
+      +'</tr></thead><tbody>';
+    rows.forEach(function(row){
+      html+='<tr>'
+        +'<td class="strong" data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['name']||'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['track']||'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['product']||'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['city']||'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['stage']||'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['spend']!=null?row['spend']:'')+'</td>'
+        +'<td data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['budget']!=null?row['budget']:'')+'</td>'
+        +'<td class="'+healthClass(row['health'])+'" data-sp-bindable="database" data-sp-database-id="On6f0fYhTft4GSwsfEJIgN">'+(row['health']||'')+'</td>'
+        +'</tr>';
+    });
+    html+='</tbody></table>';
+    listEl.innerHTML=html;
+  }
+
+  var form=document.getElementById('addForm');
+  var CACHE_PREFIX='acc_form_';
+  function saveFormCache(){
+    try{
+      var els=form.querySelectorAll('input[name]');
+      for(var i=0;i<els.length;i++){
+        var n=els[i].getAttribute('name');
+        if(/password|file|secret|token|key/i.test(n)) continue;
+        localStorage.setItem(CACHE_PREFIX+n, els[i].value);
+      }
+    }catch(e){}
+  }
+  function restoreFormCache(){
+    try{
+      var els=form.querySelectorAll('input[name]');
+      for(var i=0;i<els.length;i++){
+        var n=els[i].getAttribute('name');
+        if(/password|file|secret|token|key/i.test(n)) continue;
+        var v=localStorage.getItem(CACHE_PREFIX+n);
+        if(v!==null) els[i].value=v;
+      }
+    }catch(e){}
+  }
+  function clearFormCache(){
+    try{
+      var els=form.querySelectorAll('input[name]');
+      for(var i=0;i<els.length;i++){
+        var n=els[i].getAttribute('name');
+        if(/password|file|secret|token|key/i.test(n)) continue;
+        localStorage.removeItem(CACHE_PREFIX+n);
+      }
+    }catch(e){}
+  }
+  var _t;
+  form.addEventListener('input',function(){ clearTimeout(_t); _t=setTimeout(saveFormCache,300); });
+  restoreFormCache();
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var btn=form.querySelector('button[type=submit]');
+    btn.disabled=true; btn.textContent='提交中…';
+    var properties={
+      'name':{text:form.querySelector('[name=name]').value},
+      'track':{text:form.querySelector('[name=track]').value},
+      'product':{text:form.querySelector('[name=product]').value},
+      'city':{text:form.querySelector('[name=city]').value},
+      'stage':{text:form.querySelector('[name=stage]').value},
+      'spend':{number:parseFloat(form.querySelector('[name=spend]').value)||0},
+      'budget':{number:parseFloat(form.querySelector('[name=budget]').value)||0},
+      'health':{text:form.querySelector('[name=health]').value}
+    };
+    db.addRecord({ databaseId: DATABASE_ID, properties: properties })
+      .then(function(){ clearFormCache(); form.reset(); loadData(); })
+      .catch(function(err){ console.error('[database] 提交失败:',err); alert('提交失败，请稍后重试'); })
+      .finally(function(){ btn.disabled=false; btn.textContent='+ 添加'; });
+  });
+})();
+</script>
+</body>
+</html>
