@@ -95,6 +95,12 @@ export async function getCreatives() {
 export async function getAgentRuns() {
   return read("agent_runs");
 }
+export async function getFollowups() {
+  return read("followups");
+}
+export async function getEvents() {
+  return read("events");
+}
 
 function s(v: unknown): string {
   return v == null ? "" : String(v);

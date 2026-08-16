@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
+import ChatWidget from "@/components/ChatWidget";
 
 export const metadata: Metadata = {
   title: "觅客精灵 · AI 销售工作台",
@@ -19,6 +20,7 @@ export default function RootLayout({
           <Sidebar />
           <main className="main">{children}</main>
         </div>
+        <ChatWidget />
       </body>
     </html>
   );
