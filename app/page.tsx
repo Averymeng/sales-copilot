@@ -7,9 +7,57 @@ function healthClass(v: unknown): string {
   if (s.includes("健康") || s.includes("normal")) return "h-ok";
   return "";
 }
+function urgencyTag(u: unknown) {
+  const s = String(u || "");
+  if (s.includes("紧急")) return <span className="tag danger">紧急</span>;
+  if (s.includes("高")) return <span className="tag warn">高</span>;
+  return <span className="tag">{s}</span>;
+}
 
 export default async function HomePage() {
-  const { kpis, accounts, activeCampaigns, todoTasks, leads } = await getOverview();
+  const { kpis, accounts, activeCampaigns, todoTasks, leads, runs } = await getOverview();
+
+  // 业绩饼图：在投计划按投放目标分布
+  const objMap: Record<string, number> = {};
+  for (const c of activeCampaigns) {
+    const o = String(c.objective || "未定");
+    objMap[o] = (objMap[o] || 0) + 1;
+  }
+  const objColors: Record<string, string> = { 进线: "#f97316", 开口: "#6366f1", 留资: "#10b981", 未定: "#cbd5e1" };
+  const objEntries = Object.entries(objMap);
+  const objTotal = objEntries.reduce((a, [, n]) => a + n, 0) || 1;
+  let acc = 0;
+  const pieStops = objEntries
+    .map(([o, n]) => {
+      const start = (acc / objTotal) * 360;
+      acc += n;
+      const end = (acc / objTotal) * 360;
+      return `${objColors[o] || "#cbd5e1"} ${start}deg ${end}deg`;
+    })
+    .join(", ");
+
+  // 今日3件事：优先紧急/高，取前 3
+  const sorted = [...todoTasks].sort((a, b) => {
+    const rank = (x: unknown) => (String(x).includes("紧急") ? 0 : String(x).includes("高") ? 1 : 2);
+    return rank(a.urgency) - rank(b.urgency);
+  });
+  const top3 = sorted.slice(0, 3);
+
+  // 关键变化（基于数据衍生，无需 LLM，秒级渲染）
+  const warnAccounts = accounts.filter((a) => healthClass(a.health) === "h-warn" || healthClass(a.health) === "h-danger");
+  const changes = [
+    { k: "紧急待办", v: `${kpis.urgent} 项需今天处理`, c: kpis.urgent > 0 ? "danger" : "ok" },
+    { k: "健康度预警客户", v: `${warnAccounts.length} 家投放指标下滑`, c: warnAccounts.length > 0 ? "warn" : "ok" },
+    { k: "在投计划", v: `${kpis.activeCampaigns} 个运行中`, c: "ok" },
+    { k: "本周 Agent 运行", v: `${kpis.runs} 次`, c: "ok" },
+  ];
+
+  // 行业动态（占位：由行业监测 Agent 每日生成，这里给示例）
+  const industry = [
+    "教育行业 Q3 信息流 CPM 环比 -6%，预算可多铺 1 个在投计划",
+    "竞品「职上」新上『0 元试学』落地页，留资成本下降约 18%",
+    "小红书新增『本地生活教育』流量池，兴趣教育获量红利期",
+  ];
 
   return (
     <div>
@@ -33,7 +81,65 @@ export default async function HomePage() {
         <div className="card kpi"><div className="n">{kpis.runs}</div><div className="l">Agent 运行</div></div>
       </div>
 
-      <div className="grid2">
+      <div className="grid2" style={{ marginTop: 18 }}>
+        {/* 业绩 + 今日3件事 */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div className="card">
+            <div className="card-head"><h3>我的业绩</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>在投目标分布</span></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
+              <div style={{ width: 132, height: 132, borderRadius: "50%", background: `conic-gradient(${pieStops})`, flexShrink: 0 }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {objEntries.map(([o, n]) => (
+                  <div key={o} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: 3, background: objColors[o] || "#cbd5e1" }} />
+                    <span style={{ color: "var(--ink)" }}>{o}</span>
+                    <span style={{ color: "var(--muted)" }}>{n} 个</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-head"><h3>今日 3 件事</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>按紧急度排序</span></div>
+            <ol style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 10 }}>
+              {top3.map((t, i) => (
+                <li key={i} style={{ fontSize: 14 }}>
+                  <span className="strong">{String(t.title)}</span>
+                  <div style={{ marginTop: 3, display: "flex", gap: 8, alignItems: "center" }}>
+                    {urgencyTag(t.urgency)}
+                    <span style={{ color: "var(--muted)", fontSize: 12 }}>截止 {String(t.deadline)}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        {/* 关键变化 + 行业动态 */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div className="card">
+            <div className="card-head"><h3>关键变化</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>实时衍生</span></div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {changes.map((c, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 14 }}>
+                  <span style={{ color: "var(--muted)" }}>{c.k}</span>
+                  <span className="strong" style={{ color: c.c === "danger" ? "var(--danger)" : c.c === "warn" ? "var(--warn)" : "var(--ink)" }}>{c.v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-head"><h3>行业动态</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>行业监测 Agent 生成</span></div>
+            <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 8, fontSize: 13.5, color: "var(--ink)", lineHeight: 1.6 }}>
+              {industry.map((t, i) => <li key={i}>{t}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid2" style={{ marginTop: 18 }}>
         <div className="card">
           <div className="card-head"><h3>客户花名册</h3><span style={{ color: "var(--muted)", fontSize: 12 }}>共 {accounts.length} 家</span></div>
           <table className="tbl">
@@ -78,7 +184,7 @@ export default async function HomePage() {
               {todoTasks.slice(0, 8).map((t, i) => (
                 <tr key={i}>
                   <td className="strong">{String(t.title)}</td>
-                  <td>{String(t.urgency).includes("紧急") ? <span className="tag danger">紧急</span> : <span className="tag warn">{String(t.urgency)}</span>}</td>
+                  <td>{urgencyTag(t.urgency)}</td>
                   <td>{String(t.deadline)}</td>
                 </tr>
               ))}
