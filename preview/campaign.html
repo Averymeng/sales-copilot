@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客户投放 · 觅客精灵</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.empty { text-align:center; padding:54px 20px; }
+.empty .e-ico { width:56px; height:56px; border-radius:16px; background:var(--surface-3); display:grid; place-items:center; margin:0 auto 16px; font-size:26px; }
+.empty h3 { font-size:17px; margin-bottom:8px; }
+.empty p { color:var(--text-2); font-size:13px; max-width:360px; margin:0 auto 18px; line-height:1.7; }
+.cover { width:100%; aspect-ratio:3/4; border-radius:14px; display:grid; place-items:center; color:#fff; text-align:center; padding:18px; }
+.cover .k { font-size:13px; opacity:.85; }
+.cover .tt { font-size:22px; font-weight:800; margin-top:8px; letter-spacing:-.02em; }
+.creative { display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--border); }
+.creative:first-child { border-top:none; }
+.creative .mini { width:48px; height:64px; border-radius:8px; flex:none; }
+.creative .ct { flex:1; min-width:0; }
+.creative .ct .t { font-weight:600; font-size:13px; }
+.creative .ct .d { font-size:12px; color:var(--text-3); margin-top:2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13.5" cy="13.5" r="7.5" stroke="#fff" stroke-width="2.4"/><line x1="18.6" y1="18.6" x2="24.5" y2="24.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M23.5 5.5l1.3 2.9 2.9 1.3-2.9 1.3-1.3 2.9-1.3-2.9-2.9-1.3 2.9-1.3z" fill="#fff"/></svg></div><div><div class="name">觅客精灵</div><div class="sub">Sales Copilot</div></div></div>
+    <nav class="nav">
+      <div class="group">工作台</div>
+      <a href="dashboard.html"><span class="ico">◧</span>首页</a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓<span class="dot"></span></a>
+      <a href="clients.html"><span class="ico">◉</span>我的客户</a>
+      <div class="group">客户</div>
+      <a href="account.html"><span class="ico">◉</span>客户档案</a>
+      <a href="campaign.html" class="active"><span class="ico">◫</span>客户投放</a>
+      <a href="proposals.html"><span class="ico">▤</span>提案与复盘</a>
+      <div class="group">个人</div>
+      <a href="tasks.html"><span class="ico">☑</span>待办 / 日程</a>
+      <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+    </nav>
+    <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div><h1>研途考研 · 投放详情</h1></div>
+      <div class="search">🔍<input placeholder="Ask anything"></div>
+      <div class="seg"><button class="on" data-panel="7d">近 7 天</button><button data-panel="30d">近 30 天</button><button data-panel="ytd">本年</button></div>
+    </header>
+
+    <div class="content">
+      <!-- 顶部指标 -->
+      <div class="kpi-row" style="margin-bottom:24px">
+        <div class="card"><div class="kpi"><div class="lbl">消耗</div><div class="val sm">¥48.2万</div><div class="delta up">▲ 6.3%</div></div></div>
+        <div class="card"><div class="kpi"><div class="lbl">点击率</div><div class="val sm">3.8%</div><div class="delta up">▲ 0.4pt</div></div></div>
+        <div class="card"><div class="kpi"><div class="lbl">按钮率</div><div class="val sm">11.2%</div><div class="delta down">▼ 1.1pt</div></div></div>
+        <div class="card"><div class="kpi"><div class="lbl">留资率</div><div class="val sm">4.1%</div><div class="delta up">▲ 0.3pt</div></div></div>
+        <div class="card"><div class="kpi"><div class="lbl">留资成本</div><div class="val sm">¥88</div><div class="delta down">▲ ¥6 偏高</div></div></div>
+      </div>
+
+      <div class="grid cols-3" style="grid-template-columns:1.5fr 1fr; gap:24px; align-items:start">
+        <div>
+          <!-- 版位对比 -->
+          <div class="card span-2" style="margin-bottom:24px">
+            <div class="ch"><h3>版位对比 · 信息流 vs 搜索</h3></div>
+            <table class="table" style="font-size:13px">
+              <thead><tr><th>版位</th><th>消耗</th><th>点击率</th><th>按钮率</th><th>留资率</th><th>留资成本</th></tr></thead>
+              <tbody>
+                <tr><td class="strong">信息流</td><td>¥31.4万</td><td>3.6%</td><td>9.8%</td><td>3.7%</td><td class="delta down">¥96</td></tr>
+                <tr><td class="strong">搜索</td><td>¥16.8万</td><td>5.1%</td><td>14.6%</td><td>5.8%</td><td class="delta up">¥74</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- AI 诊断 -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="ch"><h3>智能诊断</h3></div>
+            <div class="li"><div class="ic terra">!</div><div class="tx"><div class="t">信息流留资成本偏高（¥96 vs 大盘 ¥79）</div><div class="d">主因按钮点击率下滑，建议优化封面钩子与落地页首屏。</div></div></div>
+            <div class="li"><div class="ic violet">✦</div><div class="tx"><div class="t">搜索版位效率更优，可加预算</div><div class="d">搜索词「考研集训营」CPL ¥74，建议扩词至「考研冲刺 / 大纲解读」。</div></div></div>
+          </div>
+
+          <!-- 素材（原素材库，内联） -->
+          <div class="card">
+            <div class="ch"><h3>投放素材</h3><span class="badge violet">内联于投放</span></div>
+            <div class="creative"><div class="mini g1"></div><div class="ct"><div class="t">考研倒计时 100 天 · 焦虑拆解</div><div class="d">信息流 · 点击率 4.2% · 留资率 4.6%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
+            <div class="creative"><div class="mini g2"></div><div class="ct"><div class="t">大纲发布后怎么学 · 干货清单</div><div class="d">信息流 · 点击率 3.9%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
+            <div class="creative"><div class="mini g3"></div><div class="ct"><div class="t">二战上岸经验 · 成绩展示</div><div class="d">搜索 · 点击率 5.4%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
+            <button class="btn btn-soft btn-block" style="margin-top:12px">✨ AIGC 生成新素材</button>
+          </div>
+        </div>
+
+        <div>
+          <!-- 生成动作 -->
+          <div class="card" style="margin-bottom:24px">
+            <div class="ch"><h3>一键生成</h3></div>
+            <button class="btn btn-primary btn-block" data-generate="#weekly" style="margin-bottom:10px">📑 生成周复盘</button>
+            <button class="btn btn-soft btn-block" data-generate="#proposal">📄 生成提案</button>
+            <p class="note" style="margin-top:10px">周复盘面向客户交付；提案可基于本账户历史数据生成节点 / 增投方案。</p>
+          </div>
+
+          <div class="card">
+            <div class="ch"><h3>账户信息</h3></div>
+            <div class="kv">
+              <div class="it"><div class="k">在投账户</div><div class="v">4 个</div></div>
+              <div class="it"><div class="k">主要版位</div><div class="v">信息流 + 搜索</div></div>
+              <div class="it"><div class="k">投放周期</div><div class="v">2026-03 至今</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" title="AI 副驾"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></button>
+<div class="chat">
+  <div class="head"><div class="av">觅</div><div><div class="t">觅客精灵 · 副驾</div><div class="s">随时问我 · 查数据 / 出方案 / 做复盘</div></div><button class="x">✕</button></div>
+  <div class="body"><div class="msg ai"><div class="who">觅客精灵 · 副驾</div>信息流留资成本偏高，我已定位到按钮点击率下滑。需要我直接生成一份优化版周复盘吗？</div></div>
+  <div class="chips"><span class="chip">周复盘里写优化建议</span><span class="chip">扩哪些搜索词</span></div>
+  <div class="foot"><input placeholder="问点什么…"><button>➤</button></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

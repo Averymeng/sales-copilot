@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客户投放 · 觅客精灵</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.empty { text-align:center; padding:64px 20px; }
+.empty .e-ico { width:60px; height:60px; border-radius:18px; background:var(--surface-3); display:grid; place-items:center; margin:0 auto 18px; font-size:28px; }
+.empty h3 { font-size:18px; margin-bottom:10px; }
+.empty p { color:var(--text-2); font-size:13px; max-width:380px; margin:0 auto 20px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13.5" cy="13.5" r="7.5" stroke="#fff" stroke-width="2.4"/><line x1="18.6" y1="18.6" x2="24.5" y2="24.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M23.5 5.5l1.3 2.9 2.9 1.3-2.9 1.3-1.3 2.9-1.3-2.9-2.9-1.3 2.9-1.3z" fill="#fff"/></svg></div><div><div class="name">觅客精灵</div><div class="sub">Sales Copilot</div></div></div>
+    <nav class="nav">
+      <div class="group">工作台</div>
+      <a href="dashboard.html"><span class="ico">◧</span>首页</a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓<span class="dot"></span></a>
+      <a href="clients.html"><span class="ico">◉</span>我的客户</a>
+      <div class="group">客户</div>
+      <a href="account.html"><span class="ico">◉</span>客户档案</a>
+      <a href="campaign.html" class="active"><span class="ico">◫</span>客户投放</a>
+      <a href="proposals.html"><span class="ico">▤</span>提案与复盘</a>
+      <div class="group">个人</div>
+      <a href="tasks.html"><span class="ico">☑</span>待办 / 日程</a>
+      <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+    </nav>
+    <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div><h1>研途考研 · 投放详情</h1></div>
+      <div class="search">🔍<input placeholder="Ask anything"></div>
+    </header>
+
+    <div class="content">
+      <div class="card">
+        <div class="empty">
+          <div class="e-ico">📭</div>
+          <h3>暂无投放数据</h3>
+          <p>该客户处于「预合作」阶段，尚未建投放。你可以先基于调研报告生成一份首份提案推进合作，或回到档案继续拜访跟进。</p>
+          <div style="display:flex; gap:10px; justify-content:center">
+            <a href="proposals.html" class="btn btn-primary btn-sm">📄 生成首份提案</a>
+            <a href="account.html" class="btn btn-soft btn-sm">返回客户档案</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" title="AI 副驾"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></button>
+<div class="chat">
+  <div class="head"><div class="av">觅</div><div><div class="t">觅客精灵 · 副驾</div><div class="s">随时问我 · 查数据 / 出方案 / 做复盘</div></div><button class="x">✕</button></div>
+  <div class="body"><div class="msg ai"><div class="who">觅客精灵 · 副驾</div>研途考研还没建投放。要不要我根据调研报告，直接草拟一份「考研倒计时」首份提案？</div></div>
+  <div class="chips"><span class="chip">生成首份提案</span></div>
+  <div class="foot"><input placeholder="问点什么…"><button>➤</button></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

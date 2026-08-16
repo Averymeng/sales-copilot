@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首页 · 觅客精灵</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.tk { display:flex; flex-direction:column; gap:14px; }
+.spark { display:flex; align-items:flex-end; gap:3px; height:34px; }
+.spark i { flex:1; border-radius:3px 3px 0 0; background:var(--accent-soft); }
+.spark i.h { background:linear-gradient(180deg,var(--violet),var(--accent)); }
+.news { display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--border); }
+.news:first-child { border-top:none; }
+.news .tag { font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; flex:none; }
+.news .t { font-weight:600; color:var(--ink); font-size:13px; }
+.news .d { font-size:12px; color:var(--text-2); margin-top:2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13.5" cy="13.5" r="7.5" stroke="#fff" stroke-width="2.4"/><line x1="18.6" y1="18.6" x2="24.5" y2="24.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M23.5 5.5l1.3 2.9 2.9 1.3-2.9 1.3-1.3 2.9-1.3-2.9-2.9-1.3 2.9-1.3z" fill="#fff"/></svg></div><div><div class="name">觅客精灵</div><div class="sub">Sales Copilot</div></div></div>
+    <nav class="nav">
+      <div class="group">工作台</div>
+      <a href="dashboard.html" class="active"><span class="ico">◧</span>首页</a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓<span class="dot"></span></a>
+      <a href="clients.html"><span class="ico">◉</span>我的客户</a>
+      <div class="group">客户</div>
+      <a href="account.html"><span class="ico">◉</span>客户档案</a>
+      <a href="campaign.html"><span class="ico">◫</span>客户投放</a>
+      <a href="proposals.html"><span class="ico">▤</span>提案与复盘</a>
+      <div class="group">个人</div>
+      <a href="tasks.html"><span class="ico">☑</span>待办 / 日程</a>
+      <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+    </nav>
+    <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div><h1>早上好，承泽 👋</h1></div>
+      <div class="search">🔍<input placeholder="Ask anything"></div>
+      <button class="icon-btn" title="通知">◔</button>
+      <div class="av-sm" style="background:linear-gradient(135deg,#F3C7A8,#B76F44)">孟</div>
+    </header>
+
+    <div class="content">
+      <div class="card" style="margin-bottom:24px;background:linear-gradient(120deg,#fff,#F3EEFE);border-color:#E0DAFD">
+        <div class="ch"><h3>📋 今日早报 · 8 月 16 日 周日</h3></div>
+        <div class="grid cols-3" style="gap:16px">
+          <div class="tk">
+            <div class="kpi"><div class="lbl">昨日客户总消耗</div><div class="val sm">¥48.2万</div><div class="delta up">▲ 6.3% 较上周日</div></div>
+            <div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i style="height:62%" class="h"></i></div>
+          </div>
+          <div class="tk">
+            <div class="kpi"><div class="lbl">昨日留资成本</div><div class="val sm">¥88</div><div class="delta down">▲ ¥6 偏高</div></div>
+            <p class="note" style="margin-top:6px">高于赛道均值 ¥82，主因信息流版位按钮点击率下滑。</p>
+          </div>
+          <div class="tk">
+            <div class="kpi"><div class="lbl">异常提醒</div><div class="val sm" style="color:var(--danger)">2</div>
+            <p class="note" style="margin-top:6px">「华图公考」掉量 -34% · 「新航道」留资率骤降待排查。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid cols-3" style="grid-template-columns:1.4fr 1fr; gap:24px; margin-bottom:24px">
+        <div class="card">
+          <div class="ch"><h3>🎯 今日 3 件事</h3></div>
+          <div class="li"><div class="ic terra">!</div><div class="tx"><div class="t">排查「华图公考」掉量预警</div><div class="d">消耗环比 -34%，疑似搜索词失效，建议重做关键词清单</div></div></div>
+          <div class="li"><div class="ic violet">✦</div><div class="tx"><div class="t">向「新航道」发送 Q4 雅思方案</div><div class="d">方案已就绪，待你确认后发出</div></div></div>
+          <div class="li"><div class="ic">↻</div><div class="tx"><div class="t">产出「中公教育」本周投放复盘</div><div class="d">周复盘截止今日 18:00，已为你预填数据</div></div></div>
+        </div>
+        <div class="card">
+          <div class="ch"><h3>📊 我的业绩（本月）</h3><span class="badge">教育行业</span></div>
+          <div class="kpi" style="margin-bottom:14px"><div class="lbl">本月消耗</div><div class="val sm">¥612万</div><div class="delta up">▲ 11.2% 完成率 68%</div></div>
+          <div class="bar" style="margin-bottom:16px"><i style="width:68%"></i></div>
+          <div class="grid cols-2" style="gap:12px">
+            <div><div class="note">管理客户</div><div style="font-weight:700;font-size:18px">15</div></div>
+            <div><div class="note">在投账户</div><div style="font-weight:700;font-size:18px">23</div></div>
+            <div><div class="note">本月新增线索</div><div style="font-weight:700;font-size:18px">9</div></div>
+            <div><div class="note">平均留资成本</div><div style="font-weight:700;font-size:18px">¥85</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid cols-3" style="grid-template-columns:1fr 1fr; gap:24px">
+        <div class="card">
+          <div class="ch"><h3>🌐 行业大盘（教育 · 昨日）</h3></div>
+          <table class="table" style="font-size:13px">
+            <thead><tr><th>赛道</th><th>消耗</th><th>大盘留资成本</th><th>环比</th><th>热度</th></tr></thead>
+            <tbody>
+              <tr><td class="strong">考公考编</td><td>¥128万</td><td>¥65</td><td class="delta up">▲3%</td><td>🔥🔥🔥</td></tr>
+              <tr><td class="strong">语言留学</td><td>¥89万</td><td>¥112</td><td class="delta flat">—</td><td>🔥🔥</td></tr>
+              <tr><td class="strong">职业教育</td><td>¥156万</td><td>¥96</td><td class="delta down">▼4%</td><td>🔥🔥🔥</td></tr>
+              <tr><td class="strong">兴趣教育</td><td>¥72万</td><td>¥88</td><td class="delta up">▲2%</td><td>🔥</td></tr>
+              <tr><td class="strong">学历提升</td><td>¥95万</td><td>¥104</td><td class="delta flat">—</td><td>🔥🔥</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="ch"><h3>⚡ 实时热点 / 行业动态</h3></div>
+          <div class="news"><span class="tag" style="background:var(--accent-soft);color:var(--accent);font-size:13px">政策</span><div><div class="t">成人高考 8 月报名季开启，咨询量周环比 +41%</div><div class="d">→ 考公考编 / 学历提升赛道进入投放窗口</div></div></div>
+          <div class="news"><span class="tag" style="background:var(--terra-soft);color:var(--terra);font-size:13px">竞品</span><div><div class="t">竞品「高顿」小红书搜索词新增「AI 会计证」</div><div class="d">→ 建议职业教育客户跟进该词</div></div></div>
+          <div class="news"><span class="tag" style="background:var(--violet-soft);color:var(--deep);font-size:13px">热点</span><div><div class="t">#考研倒计时 话题阅读破 3.2 亿</div><div class="d">→ 考研冲刺课种草窗口开启</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<button class="fab" title="AI 副驾"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></button>
+<div class="chat">
+  <div class="head"><div class="av">觅</div><div><div class="t">觅客精灵 · 副驾</div><div class="s">随时问我 · 查数据 / 出方案 / 做复盘</div></div><button class="x">✕</button></div>
+  <div class="body"><div class="msg ai"><div class="who">觅客精灵 · 副驾</div>你好，承泽。今天的早报已生成，有 2 项异常需关注。需要我帮你排查或出方案吗？</div></div>
+  <div class="chips"><span class="chip">今天该重点跟谁？</span><span class="chip">华图公考为什么掉量</span><span class="chip">给新航道出个方案</span></div>
+  <div class="foot"><input placeholder="问点什么…"><button>➤</button></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
