@@ -10,15 +10,35 @@
 .empty .e-ico { width:56px; height:56px; border-radius:16px; background:var(--surface-3); display:grid; place-items:center; margin:0 auto 16px; font-size:26px; }
 .empty h3 { font-size:17px; margin-bottom:8px; }
 .empty p { color:var(--text-2); font-size:13px; max-width:360px; margin:0 auto 18px; line-height:1.7; }
-.cover { width:100%; aspect-ratio:3/4; border-radius:14px; display:grid; place-items:center; color:#fff; text-align:center; padding:18px; }
-.cover .k { font-size:13px; opacity:.85; }
-.cover .tt { font-size:22px; font-weight:800; margin-top:8px; letter-spacing:-.02em; }
-.creative { display:flex; gap:14px; align-items:center; padding:12px 0; border-top:1px solid var(--border); }
-.creative:first-child { border-top:none; }
-.creative .mini { width:48px; height:64px; border-radius:8px; flex:none; }
-.creative .ct { flex:1; min-width:0; }
-.creative .ct .t { font-weight:600; font-size:13px; }
-.creative .ct .d { font-size:12px; color:var(--text-3); margin-top:2px; }
+
+/* Material card — rich image+text */
+.mat-card { display:flex; gap:14px; padding:14px; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface); transition:box-shadow .15s, transform .15s; margin-bottom:12px; }
+.mat-card:hover { box-shadow:var(--sh-2); transform:translateY(-1px); }
+.mat-cover { width:120px; height:160px; border-radius:10px; flex:none; display:grid; place-items:center; color:#fff; position:relative; overflow:hidden; }
+.mat-cover .tag { position:absolute; top:8px; left:8px; font-size:10px; font-weight:700; background:rgba(0,0,0,.35); color:#fff; padding:3px 8px; border-radius:999px; backdrop-filter:blur(4px); }
+.mat-cover .tt { font-size:15px; font-weight:800; text-shadow:0 1px 6px rgba(0,0,0,.35); line-height:1.25; text-align:center; padding:8px; }
+.mat-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
+.mat-info .t { font-weight:700; font-size:14px; }
+.mat-info .d { font-size:12px; color:var(--text-3); line-height:1.5; }
+.mat-stats { display:flex; gap:12px; margin-top:auto; padding-top:8px; border-top:1px solid var(--border); }
+.mat-stats .ms { font-size:12px; }
+.mat-stats .ms b { font-size:15px; color:var(--ink); }
+
+/* Trend bar */
+.trend-bar { display:flex; align-items:flex-end; gap:5px; height:60px; padding-top:10px; }
+.trend-bar i { flex:1; border-radius:4px 4px 0 0; background:var(--accent-soft); min-height:8px; position:relative; }
+.trend-bar i.f { background:linear-gradient(180deg,var(--violet),var(--accent)); }
+.trend-bar i .tv { position:absolute; top:-20px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--text-3); white-space:nowrap; }
+
+/* Mini donut for placement share */
+.pie-sm { width:80px; height:80px; position:relative; flex:none; }
+.pie-sm svg { width:100%; height:100%; transform:rotate(-90deg); }
+.pie-sm .bg { fill:none; stroke:var(--surface-3); stroke-width:8; }
+.pie-sm .fg { fill:none; stroke-width:8; stroke-linecap:round; }
+.pie-sm .ctr { position:absolute; inset:0; display:grid; place-items:center; font-size:14px; font-weight:700; }
+
+/* Action bar top-right */
+.act-bar { display:flex; align-items:center; gap:10px; margin-left:auto; flex:none; }
 </style>
 </head>
 <body>
@@ -28,7 +48,7 @@
     <nav class="nav">
       <div class="group">工作台</div>
       <a href="dashboard.html"><span class="ico">◧</span>首页</a>
-      <a href="leads.html"><span class="ico">✦</span>新客开拓<span class="dot"></span></a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓</a>
       <a href="clients.html"><span class="ico">◉</span>我的客户</a>
       <div class="group">客户</div>
       <a href="account.html"><span class="ico">◉</span>客户档案</a>
@@ -37,77 +57,56 @@
       <div class="group">个人</div>
       <a href="tasks.html"><span class="ico">☑</span>待办 / 日程</a>
       <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+      <a href="qa.html"><span class="ico">💬</span>精灵问答</a>
     </nav>
     <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
   </aside>
 
   <div class="main">
     <header class="topbar">
-      <div><h1>研途考研 · 投放详情</h1></div>
+      <div><h1>客户投放</h1></div>
       <div class="search">🔍<input placeholder="Ask anything"></div>
-      <div class="seg"><button class="on" data-panel="7d">近 7 天</button><button data-panel="30d">近 30 天</button><button data-panel="ytd">本年</button></div>
     </header>
 
     <div class="content">
-      <!-- 顶部指标 -->
-      <div class="kpi-row" style="margin-bottom:24px">
-        <div class="card"><div class="kpi"><div class="lbl">消耗</div><div class="val sm">¥48.2万</div><div class="delta up">▲ 6.3%</div></div></div>
-        <div class="card"><div class="kpi"><div class="lbl">点击率</div><div class="val sm">3.8%</div><div class="delta up">▲ 0.4pt</div></div></div>
-        <div class="card"><div class="kpi"><div class="lbl">按钮率</div><div class="val sm">11.2%</div><div class="delta down">▼ 1.1pt</div></div></div>
-        <div class="card"><div class="kpi"><div class="lbl">留资率</div><div class="val sm">4.1%</div><div class="delta up">▲ 0.3pt</div></div></div>
-        <div class="card"><div class="kpi"><div class="lbl">留资成本</div><div class="val sm">¥88</div><div class="delta down">▲ ¥6 偏高</div></div></div>
-      </div>
-
-      <div class="grid cols-3" style="grid-template-columns:1.5fr 1fr; gap:24px; align-items:start">
-        <div>
-          <!-- 版位对比 -->
-          <div class="card span-2" style="margin-bottom:24px">
-            <div class="ch"><h3>版位对比 · 信息流 vs 搜索</h3></div>
-            <table class="table" style="font-size:13px">
-              <thead><tr><th>版位</th><th>消耗</th><th>点击率</th><th>按钮率</th><th>留资率</th><th>留资成本</th></tr></thead>
-              <tbody>
-                <tr><td class="strong">信息流</td><td>¥31.4万</td><td>3.6%</td><td>9.8%</td><td>3.7%</td><td class="delta down">¥96</td></tr>
-                <tr><td class="strong">搜索</td><td>¥16.8万</td><td>5.1%</td><td>14.6%</td><td>5.8%</td><td class="delta up">¥74</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- AI 诊断 -->
-          <div class="card" style="margin-bottom:24px">
-            <div class="ch"><h3>智能诊断</h3></div>
-            <div class="li"><div class="ic terra">!</div><div class="tx"><div class="t">信息流留资成本偏高（¥96 vs 大盘 ¥79）</div><div class="d">主因按钮点击率下滑，建议优化封面钩子与落地页首屏。</div></div></div>
-            <div class="li"><div class="ic violet">✦</div><div class="tx"><div class="t">搜索版位效率更优，可加预算</div><div class="d">搜索词「考研集训营」CPL ¥74，建议扩词至「考研冲刺 / 大纲解读」。</div></div></div>
-          </div>
-
-          <!-- 素材（原素材库，内联） -->
-          <div class="card">
-            <div class="ch"><h3>投放素材</h3><span class="badge violet">内联于投放</span></div>
-            <div class="creative"><div class="mini g1"></div><div class="ct"><div class="t">考研倒计时 100 天 · 焦虑拆解</div><div class="d">信息流 · 点击率 4.2% · 留资率 4.6%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
-            <div class="creative"><div class="mini g2"></div><div class="ct"><div class="t">大纲发布后怎么学 · 干货清单</div><div class="d">信息流 · 点击率 3.9%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
-            <div class="creative"><div class="mini g3"></div><div class="ct"><div class="t">二战上岸经验 · 成绩展示</div><div class="d">搜索 · 点击率 5.4%</div></div><button class="btn btn-ghost btn-sm">复用</button></div>
-            <button class="btn btn-soft btn-block" style="margin-top:12px">✨ AIGC 生成新素材</button>
-          </div>
+      <!-- Filter bar + 一键生成 on right -->
+      <div style="display:flex; align-items:flex-end; gap:18px; margin-bottom:22px; flex-wrap:wrap">
+        <div class="fb-field">
+          <label>客户</label>
+          <select class="fb-select" data-client-filter data-target="#camp-detail" data-empty="#camp-empty">
+            <option value="">未选择客户</option>
+            <option value="#tpl-camp-empty" data-stage="预合作">研途考研</option>
+            <option value="#tpl-camp-empty" data-stage="预合作">成人在线学堂</option>
+            <option value="#tpl-camp-empty" data-stage="预合作">新航道雅思</option>
+            <option value="#tpl-camp" data-stage="已有投放">华图公考</option>
+            <option value="#tpl-camp" data-stage="已有投放">中公教育</option>
+            <option value="#tpl-camp" data-stage="已有投放">新东方前途</option>
+            <option value="#tpl-camp" data-stage="已有投放">高顿教育</option>
+          </select>
         </div>
-
-        <div>
-          <!-- 生成动作 -->
-          <div class="card" style="margin-bottom:24px">
-            <div class="ch"><h3>一键生成</h3></div>
-            <button class="btn btn-primary btn-block" data-generate="#weekly" style="margin-bottom:10px">📑 生成周复盘</button>
-            <button class="btn btn-soft btn-block" data-generate="#proposal">📄 生成提案</button>
-            <p class="note" style="margin-top:10px">周复盘面向客户交付；提案可基于本账户历史数据生成节点 / 增投方案。</p>
-          </div>
-
-          <div class="card">
-            <div class="ch"><h3>账户信息</h3></div>
-            <div class="kv">
-              <div class="it"><div class="k">在投账户</div><div class="v">4 个</div></div>
-              <div class="it"><div class="k">主要版位</div><div class="v">信息流 + 搜索</div></div>
-              <div class="it"><div class="k">投放周期</div><div class="v">2026-03 至今</div></div>
-            </div>
-          </div>
+        <div class="fb-field">
+          <label>阶段</label>
+          <select class="fb-select" id="camp-stage">
+            <option value="全部">全部</option>
+            <option value="预合作">预合作</option>
+            <option value="已有投放">已有投放</option>
+          </select>
+        </div>
+        <div class="act-bar">
+          <button class="btn btn-primary btn-sm" data-generate="#gen-camp-w">📑 生成周复盘</button>
+          <button class="btn btn-soft btn-sm" data-generate="#gen-camp-p">📄 生成提案</button>
         </div>
       </div>
+
+      <!-- Empty state -->
+      <div class="ambient" id="camp-empty">
+        <div class="amb-ico">📊</div>
+        <h3>还没有选定客户</h3>
+        <p>从上方筛选一位客户，这里会展示它的投放表现、素材与智能诊断。先在左侧挑一个开始吧。</p>
+        <div class="amb-tip">完整客户列表见「我的客户」</div>
+      </div>
+
+      <div class="cf-detail" id="camp-detail"></div>
     </div>
   </div>
 </div>
@@ -119,6 +118,155 @@
   <div class="chips"><span class="chip">周复盘里写优化建议</span><span class="chip">扩哪些搜索词</span></div>
   <div class="foot"><input placeholder="问点什么…"><button>➤</button></div>
 </div>
+
+<!-- ===== 已有投放模板（rich dashboard） ===== -->
+<div class="dwrap" id="tpl-camp" hidden>
+  <!-- KPI row -->
+  <div class="kpi-row" style="margin-bottom:20px">
+    <div class="card"><div class="kpi"><div class="lbl">近 7 天消耗</div><div class="val sm">¥48.2万</div><div class="delta up">▲ 6.3%</div></div><div class="trend-bar" style="height:36px;margin-top:8px"><i style="height:55%"><span class="tv">周一</span></i><i style="height:70%"><span class="tv">周二</span></i><i style="height:62%"><span class="tv">周三</span></i><i style="height:85%" class="f"><span class="tv">周四</span></i><i style="height:78%"><span class="tv">周五</span></i><i style="height:90%" class="f"><span class="tv">周六</span></i><i style="height:100%" class="f"><span class="tv">周日</span></i></div></div>
+    <div class="card"><div class="kpi"><div class="lbl">点击率</div><div class="val sm">3.8%</div><div class="delta up">▲ 0.4pt</div></div><div class="trend-bar" style="height:36px;margin-top:8px"><i style="height:60%"></i><i style="height:65%"></i><i style="height:72%"></i><i style="height:78%" class="f"></i><i style="height:82%"></i><i style="height:88%" class="f"></i><i style="height:92%" class="f"></i></div></div>
+    <div class="card"><div class="kpi"><div class="lbl">按钮率</div><div class="val sm">11.2%</div><div class="delta down">▼ 1.1pt</div></div><div class="trend-bar" style="height:36px;margin-top:8px"><i style="height:90%"></i><i style="height:85%"></i><i style="height:80%"></i><i style="height:75%"></i><i style="height:70%"></i><i style="height:68%"></i><i style="height:65%"></i></div></div>
+    <div class="card"><div class="kpi"><div class="lbl">留资率</div><div class="val sm">4.1%</div><div class="delta up">▲ 0.3pt</div></div><div class="trend-bar" style="height:36px;margin-top:8px"><i style="height:65%"></i><i style="height:70%"></i><i style="height:75%" class="f"></i><i style="height:80%" class="f"></i><i style="height:78%"></i><i style="height:82%" class="f"></i></div></div>
+    <div class="card"><div class="kpi"><div class="lbl">留资成本</div><div class="val sm">¥88</div><div class="delta down">▲ ¥6 偏高</div></div><div class="trend-bar" style="height:36px;margin-top:8px"><i style="height:70%"></i><i style="height:75%"></i><i style="height:82%"></i><i style="height:88%"></i><i style="height:95%"></i><i style="height:100%"></i></div></div>
+  </div>
+
+  <div class="grid cols-3" style="grid-template-columns:1.6fr 1fr; gap:20px; align-items:start">
+    <div>
+      <!-- 版位对比 table -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="ch"><h3>版位对比 · 信息流 vs 搜索</h3><span class="badge violet">近 7 天</span></div>
+        <table class="table" style="font-size:13px">
+          <thead><tr><th>版位</th><th>消耗</th><th>占比</th><th>点击率</th><th>按钮率</th><th>留资率</th><th>留资成本</th></tr></thead>
+          <tbody>
+            <tr><td class="strong">信息流</td><td>¥31.4万</td><td>65%</td><td>3.6%</td><td>9.8%</td><td>3.7%</td><td class="delta down">¥96</td></tr>
+            <tr><td class="strong">搜索</td><td>¥16.8万</td><td>35%</td><td>5.1%</td><td>14.6%</td><td>5.8%</td><td class="delta up">¥74</td></tr>
+          </tbody>
+        </table>
+        <div style="display:flex; gap:16px; margin-top:14px; align-items:center">
+          <div class="pie-sm">
+            <svg viewBox="0 0 36 36"><circle class="bg" cx="18" cy="18" r="15.9"/><circle class="fg" cx="18" cy="18" r="15.9" stroke="#5B5BD8" stroke-dasharray="65 35"/></svg>
+            <div class="ctr">65%</div>
+          </div>
+          <div style="flex:1"><div class="note">信息流占比 65%，但 CPL 偏高 30%。建议将 15–20% 预算从信息流转移至搜索版位。</div></div>
+        </div>
+      </div>
+
+      <!-- 投放素材 — rich cards -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="ch"><h3>投放素材库</h3><span class="badge violet">3 条在投</span></div>
+        <div class="mat-card">
+          <div class="mat-cover g1"><span class="tag">信息流 · 热门</span><span class="tt">考研倒计时<br>100 天<br>焦虑拆解</span></div>
+          <div class="mat-info">
+            <div class="t">考研倒计时 100 天 · 焦虑拆解</div>
+            <div class="d">利用考前焦虑情绪，以「倒计时+分数自测」为钩子引导留资。封面采用深紫渐变+大字数字，CTR 表现优异。</div>
+            <div class="mat-stats">
+              <div class="ms">点击率 <b>4.2%</b></div>
+              <div class="ms">留资率 <b>4.6%</b></div>
+              <div class="ms">消耗占比 <b>38%</b></div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="align-self:center">复用</button>
+        </div>
+        <div class="mat-card">
+          <div class="mat-cover g2"><span class="tag">信息流</span><span class="tt">大纲发布后<br>怎么学<br>干货清单</span></div>
+          <div class="mat-info">
+            <div class="t">大纲发布后怎么学 · 干货清单</div>
+            <div class="d">干货盘点型内容，适合对考研流程模糊的考生。以「清单体」降低阅读门槛，落地页配套资料包领取。</div>
+            <div class="mat-stats">
+              <div class="ms">点击率 <b>3.9%</b></div>
+              <div class="ms">留资率 <b>4.1%</b></div>
+              <div class="ms">消耗占比 <b>28%</b></div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="align-self:center">复用</button>
+        </div>
+        <div class="mat-card">
+          <div class="mat-cover g3"><span class="tag">搜索 · 高效</span><span class="tt">二战上岸<br>经验分享<br>成绩展示</span></div>
+          <div class="mat-info">
+            <div class="t">二战上岸经验 · 成绩展示</div>
+            <div class="d">搜索词「考研经验/二战上岸」精准截流，用户意向度高。以真实成绩单+备考时间线建立信任。</div>
+            <div class="mat-stats">
+              <div class="ms">点击率 <b>5.4%</b></div>
+              <div class="ms">留资率 <b>5.8%</b></div>
+              <div class="ms">消耗占比 <b>34%</b></div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="align-self:center">复用</button>
+        </div>
+        <button class="btn btn-soft btn-block" style="margin-top:4px">✨ AIGC 生成新素材</button>
+      </div>
+
+      <!-- 智能诊断 -->
+      <div class="card">
+        <div class="ch"><h3>智能诊断</h3><span class="badge terra">2 条建议</span></div>
+        <div class="li"><div class="ic terra">!</div><div class="tx"><div class="t">信息流留资成本偏高（¥96 vs 大盘 ¥79）</div><div class="d">主因按钮点击率从 12.3% 下滑至 9.8%。建议：①优化封面钩子文案（加入数字/紧迫感）②A/B 测试落地页首屏表单位置。</div></div></div>
+        <div class="li"><div class="ic violet">✦</div><div class="tx"><div class="t">搜索版位效率更优，可加预算</div><div class="d">搜索词「考研集训营」CPL ¥74，「考研冲刺班」CPL ¥71。建议扩词至「考研冲刺 / 大纲解读 / 考研择校」，并提升出价 10%。</div></div></div>
+        <div class="li"><div class="ic">↻</div><div class="tx"><div class="t">素材疲劳预警</div><div class="d">「焦虑拆解」素材已连续投放 14 天，CTR 从 4.8% 降至 4.2%。建议本周内更新 1–2 条新素材。</div></div></div>
+      </div>
+    </div>
+
+    <div>
+      <!-- 账户概览 -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="ch"><h3>账户概览</h3></div>
+        <div class="kv"><div class="it"><div class="k">在投账户</div><div class="v">4 个</div></div><div class="it"><div class="k">主要版位</div><div class="v">信息流 + 搜索</div></div><div class="it"><div class="k">投放周期</div><div class="v">2026-03 至今</div></div><div class="it"><div class="k">月预算</div><div class="v">¥60–80 万</div></div><div class="it"><div class="k">目标 CPA</div><div class="v">≤ ¥80</div></div></div>
+      </div>
+
+      <!-- 消耗趋势 -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="ch"><h3>近 4 周消耗趋势</h3></div>
+        <div class="trend-bar" style="height:100px">
+          <i style="height:60%"><span class="tv">W1<br>¥38万</span></i>
+          <i style="height:72%"><span class="tv">W2<br>¥42万</span></i>
+          <i style="height:85%" class="f"><span class="tv">W3<br>¥45万</span></i>
+          <i style="height:100%" class="f"><span class="tv">W4<br>¥48万</span></i>
+        </div>
+        <p class="note" style="margin-top:10px;text-align:center">连续 4 周增长 ▲ 26%，主要来自搜索版位扩量。</p>
+      </div>
+
+      <!-- 快捷操作 -->
+      <div class="card">
+        <div class="ch"><h3>快捷操作</h3></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-soft btn-block">📊 导出数据报表</button>
+          <button class="btn btn-soft btn-block">📝 添加到待办</button>
+          <button class="btn btn-soft btn-block">💬 询问 AI 优化建议</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="gen-camp-w" data-shimmer data-done="✓ 周复盘已生成，可导出 Word" class="card" style="display:none;margin-top:16px"></div>
+  <div id="gen-camp-p" data-shimmer data-done="✓ 提案已生成，可导出 Word / PPT" class="card" style="display:none;margin-top:12px"></div>
+</div>
+
+<!-- 预合作空态模板 -->
+<div class="dwrap" id="tpl-camp-empty" hidden>
+  <div class="empty">
+    <div class="e-ico">📭</div>
+    <h3>暂无投放数据</h3>
+    <p>该客户处于预合作阶段，尚未建立小红书投放。建议先推进拜访、生成首份提案，确认合作后由投放团队建户起量。</p>
+    <button class="btn btn-primary" data-generate="#gen-empty">📄 生成首份提案</button>
+    <div id="gen-empty" data-shimmer data-done="✓ 首份提案已生成，可发送给客户" class="card" style="display:none;margin-top:14px"></div>
+  </div>
+</div>
+
 <script src="app.js"></script>
+<script>
+(function(){
+  var stageSel=document.getElementById('camp-stage');
+  var custSel=document.querySelector('[data-client-filter]');
+  if(stageSel&&custSel){
+    stageSel.addEventListener('change',function(){
+      var v=stageSel.value;
+      Array.prototype.forEach.call(custSel.options,function(o){
+        if(o.value==='')return;
+        var show=(v==='全部'||o.getAttribute('data-stage')===v);
+        o.style.display=show?'':'none';
+        o.disabled=!show;
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>

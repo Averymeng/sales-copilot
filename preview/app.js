@@ -113,6 +113,29 @@
     });
   }
 
+  // —— 客户筛选（档案 / 投放页：未筛选→氛围留白，选中→内联渲染） ——
+  function renderClientFilter(sel) {
+    var tplId = sel.value;
+    var target = document.querySelector(sel.getAttribute('data-target'));
+    var empty = document.querySelector(sel.getAttribute('data-empty'));
+    if (!tplId) {
+      if (target) { target.innerHTML = ''; target.style.display = 'none'; }
+      if (empty) empty.style.display = '';
+      return;
+    }
+    var tpl = document.querySelector(tplId);
+    if (tpl && target) {
+      target.innerHTML = tpl.innerHTML;
+      target.style.display = '';
+      if (empty) empty.style.display = 'none';
+      bindDynamic(target);
+      if (target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+  document.querySelectorAll('[data-client-filter]').forEach(function (sel) {
+    sel.addEventListener('change', function () { renderClientFilter(sel); });
+  });
+
   // —— 一键转档案（页面级，非抽屉） ——
   document.querySelectorAll('[data-convert]').forEach(function (b) {
     if (b._c) return; b._c = 1;

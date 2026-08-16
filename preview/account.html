@@ -6,15 +6,63 @@
 <title>客户档案 · 觅客精灵</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-.stage { font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; background:var(--ok-soft); color:var(--ok); }
-.tl { display:flex; flex-direction:column; gap:0; margin-top:6px; }
-.tl .it { display:flex; gap:14px; padding:14px 0; border-left:2px solid var(--border); padding-left:18px; position:relative; }
-.tl .it::before { content:""; position:absolute; left:-5px; top:18px; width:9px; height:9px; border-radius:50%; background:var(--accent); }
-.tl .it .when { font-size:12px; color:var(--text-3); min-width:74px; flex:none; }
-.tl .it .body { flex:1; }
-.tl .it .tt { font-weight:600; font-size:13px; }
-.tl .it .dd { font-size:13px; color:var(--text-2); margin-top:3px; line-height:1.6; }
-.tl .it .ai { font-size:11px; color:var(--accent); font-weight:700; margin-top:6px; }
+.row { display:flex; align-items:center; gap:14px; padding:16px 18px; border-bottom:1px solid var(--border); }
+.row:last-child { border-bottom:none; }
+.row .av-sq { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; color:#fff; font-weight:700; flex:none; }
+.row .info { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.row .nm { font-weight:700; font-size:14px; }
+.row .sb { font-size:12px; color:var(--text-3); }
+.row .num { font-size:13px; color:var(--text-2); min-width:88px; }
+.row .num b { color:var(--ink); font-size:15px; }
+.row .acts { display:flex; gap:8px; flex:none; }
+.health { font-size:12px; font-weight:600; }
+.health.ok { color:var(--ok); }
+.health.warn { color:var(--terra); }
+.stage { font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; }
+.stage.pre { background:var(--violet-soft); color:var(--deep); }
+.stage.on { background:var(--ok-soft); color:var(--ok); }
+
+/* Client profile card — the "manual" style */
+.profile-header { display:flex; gap:18px; align-items:start; margin-bottom:20px; }
+.ph-avatar { width:72px; height:72px; border-radius:18px; display:grid; place-items:center; color:#fff; font-size:28px; font-weight:800; flex:none; }
+.ph-info { flex:1; min-width:0; }
+.ph-info .name { font-size:20px; font-weight:720; letter-spacing:-.02em; margin-bottom:4px; }
+.ph-info .meta { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.ph-info .meta span { font-size:12px; padding:3px 10px; border-radius:999px; background:var(--surface-3); color:var(--text-2); }
+.ph-info .desc { font-size:13px; color:var(--text-2); line-height:1.6; }
+
+/* Contact / decision maker section */
+.contact-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.contact-item { display:flex; gap:10px; padding:12px; border:1px solid var(--border); border-radius:var(--r-md); }
+.contact-item .ci-icon { width:36px; height:36px; border-radius:10px; background:var(--accent-soft); display:grid; place-items:center; flex:none; font-size:16px; }
+.contact-item .ci-body { flex:1; min-width:0; }
+.contact-item .ci-name { font-weight:700; font-size:13px; }
+.contact-item .ci-role { font-size:11px; color:var(--text-3); }
+.contact-item .ci-detail { font-size:12px; color:var(--text-2); margin-top:3px; }
+
+/* Follow-up timeline — richer */
+.tl-rich { display:flex; flex-direction:column; gap:0; }
+.tl-rich .it { display:grid; grid-template-columns:16px 1fr auto; gap:var(--s-3); padding-bottom:var(--s-4); position:relative; }
+.tl-rich .it::before { content:""; position:absolute; left:7px; top:16px; bottom:-4px; width:2px; background:var(--border); }
+.tl-rich .it:last-child::before { display:none; }
+.tl-rich .dot { width:14px; height:14px; border-radius:50%; background:var(--surface); border:3px solid var(--accent); margin-top:2px; }
+.tl-rich .dot.terra { border-color:var(--terra); }
+.tl-rich .dot.violet { border-color:var(--violet); }
+.tl-rich .dot.ok { border-color:var(--ok); }
+.tl-rich .tx { min-width:0; }
+.tl-rich .tx .t { font-weight:600; font-size:13px; }
+.tl-rich .tx .d { font-size:12px; color:var(--text-2); margin-top:2px; line-height:1.5; }
+.tl-rich .date { font-size:11px; color:var(--text-3); white-space:nowrap; }
+
+/* Sales notes */
+.sales-note { background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:0 var(--r-md) var(--r-md) 0; padding:14px 16px; font-size:13px; line-height:1.7; color:var(--ink); }
+.sales-note b { color:var(--accent); }
+
+/* Compact mini-stats for 投放 (reduced from before) */
+.mini-stats { display:flex; gap:12px; flex-wrap:wrap; }
+.mini-stats .ms { text-align:center; padding:10px 16px; background:var(--surface-3); border-radius:var(--r-md); }
+.mini-stats .ms .v { font-size:18px; font-weight:720; color:var(--ink); }
+.mini-stats .ms .k { font-size:11px; color:var(--text-3); }
 </style>
 </head>
 <body>
@@ -24,7 +72,7 @@
     <nav class="nav">
       <div class="group">工作台</div>
       <a href="dashboard.html"><span class="ico">◧</span>首页</a>
-      <a href="leads.html"><span class="ico">✦</span>新客开拓<span class="dot"></span></a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓</a>
       <a href="clients.html"><span class="ico">◉</span>我的客户</a>
       <div class="group">客户</div>
       <a href="account.html" class="active"><span class="ico">◉</span>客户档案</a>
@@ -33,70 +81,49 @@
       <div class="group">个人</div>
       <a href="tasks.html"><span class="ico">☑</span>待办 / 日程</a>
       <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+      <a href="qa.html"><span class="ico">💬</span>精灵问答</a>
     </nav>
     <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
   </aside>
-
   <div class="main">
     <header class="topbar">
-      <div><h1>研途考研 <span class="stage">已有</span></h1></div>
+      <div><h1>客户档案</h1></div>
       <div class="search">🔍<input placeholder="Ask anything"></div>
-      <button class="btn btn-soft btn-sm">✎ 编辑档案</button>
     </header>
 
     <div class="content">
-      <div class="health warn" style="margin-bottom:20px; background:var(--terra-soft); color:var(--terra); padding:10px 14px; border-radius:var(--r-md); font-weight:600">⚠ 健康度预警：已 12 天未跟进（建议本周内触达）</div>
-
-      <div class="grid cols-3" style="grid-template-columns:1.4fr 1fr; gap:24px; align-items:start">
-        <div>
-          <div class="card" style="margin-bottom:24px">
-            <div class="ch"><h3>客户档案</h3></div>
-            <div class="kv">
-              <div class="it"><div class="k">所属赛道</div><div class="v">考研 / 职业教育</div></div>
-              <div class="it"><div class="k">主推产品</div><div class="v">考研冲刺集训营</div></div>
-              <div class="it"><div class="k">客单价</div><div class="v">¥12,800</div></div>
-              <div class="it"><div class="k">预算档位</div><div class="v">年框 ¥300万+</div></div>
-              <div class="it"><div class="k">对接人</div><div class="v">王琳 · 市场总监</div></div>
-              <div class="it"><div class="k">联系电话</div><div class="v">138****6021</div></div>
-              <div class="it"><div class="k">决策周期</div><div class="v">45–60 天</div></div>
-              <div class="it"><div class="k">历史投放</div><div class="v">未投过小红书</div></div>
-            </div>
-            <div class="tag-row" style="margin-top:16px">
-              <span class="badge">目标人群：考研党</span><span class="badge violet">焦虑驱动</span><span class="badge terra">强季节</span>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="ch"><h3>跟进合作情况</h3><span class="badge blue">时间线</span></div>
-            <div class="tl">
-              <div class="it"><div class="when">08-16</div><div class="body"><div class="tt">AI 生成拜访提纲</div><div class="dd">基于调研报告自动产出首访提纲，覆盖「考研倒计时」节点方案切入点。</div><div class="ai">⚡ 执行跟进提炼</div></div></div>
-              <div class="it"><div class="when">08-14</div><div class="body"><div class="tt">线索转入档案（预合作）</div><div class="dd">由新客开拓「添加到档案」生成客户档案，进入拜访推进。</div></div></div>
-              <div class="it"><div class="when">08-12</div><div class="body"><div class="tt">商机发现 Agent 捕获信号</div><div class="dd">#考研倒计时 阅读破 3.2 亿，进入种草窗口，自动生成调研报告。</div><div class="ai">⚡ 商机发现 Agent</div></div></div>
-              <div class="it"><div class="when">08-09</div><div class="body"><div class="tt">公开报道触达</div><div class="dd">小红书考研话题热度 TOP3，列入高优先级线索。</div></div></div>
-            </div>
-          </div>
+      <div class="filterbar">
+        <div class="fb-field">
+          <label>客户</label>
+          <select class="fb-select" data-client-filter data-target="#acc-detail" data-empty="#acc-empty">
+            <option value="">未选择客户</option>
+            <option value="#tpl-acc-yantu" data-stage="预合作">研途考研</option>
+            <option value="#tpl-acc-chengren" data-stage="预合作">成人在线学堂</option>
+            <option value="#tpl-acc-xinhangdao" data-stage="预合作">新航道雅思</option>
+            <option value="#tpl-acc-huatu" data-stage="已有投放">华图公考</option>
+            <option value="#tpl-acc-zhonggong" data-stage="已有投放">中公教育</option>
+            <option value="#tpl-acc-xindongfang" data-stage="已有投放">新东方前途</option>
+            <option value="#tpl-acc-gaodun" data-stage="已有投放">高顿教育</option>
+          </select>
         </div>
-
-        <div>
-          <div class="card" style="margin-bottom:24px">
-            <div class="ch"><h3>投放概览</h3></div>
-            <div class="kpi" style="margin-bottom:12px"><div class="lbl">累计消耗</div><div class="val sm">¥312万</div><div class="delta up">▲ 9.4%</div></div>
-            <div class="grid cols-2" style="gap:12px">
-              <div><div class="note">平均留资成本</div><div style="font-weight:700;font-size:17px">¥79</div></div>
-              <div><div class="note">在投账户</div><div style="font-weight:700;font-size:17px">4</div></div>
-            </div>
-            <a href="campaign.html" class="btn btn-soft btn-block" style="margin-top:14px">查看客户投放 →</a>
-          </div>
-          <div class="card">
-            <div class="ch"><h3>快捷动作</h3></div>
-            <div style="display:flex; flex-direction:column; gap:10px">
-              <a href="campaign.html" class="btn btn-primary btn-block">生成提案</a>
-              <a href="proposals.html" class="btn btn-ghost btn-block">查看提案 / 复盘</a>
-              <button class="btn btn-soft btn-block">添加到待办</button>
-            </div>
-          </div>
+        <div class="fb-field">
+          <label>阶段</label>
+          <select class="fb-select" id="acc-stage">
+            <option value="全部">全部</option>
+            <option value="预合作">预合作</option>
+            <option value="已有投放">已有投放</option>
+          </select>
         </div>
       </div>
+
+      <div class="ambient" id="acc-empty">
+        <div class="amb-ico">🗂️</div>
+        <h3>还没有选定客户</h3>
+        <p>从上方筛选一位客户，这里会展开它的完整档案——资料、AI 调研、跟进时间线与合作情况。先挑一个开始吧。</p>
+        <div class="amb-tip">完整客户列表见「我的客户」</div>
+      </div>
+
+      <div class="cf-detail" id="acc-detail"></div>
     </div>
   </div>
 </div>
@@ -104,10 +131,439 @@
 <button class="fab" title="AI 副驾"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg></button>
 <div class="chat">
   <div class="head"><div class="av">觅</div><div><div class="t">觅客精灵 · 副驾</div><div class="s">随时问我 · 查数据 / 出方案 / 做复盘</div></div><button class="x">✕</button></div>
-  <div class="body"><div class="msg ai"><div class="who">觅客精灵 · 副驾</div>研途考研已 12 天未跟进。要不要我根据上次拜访，草拟一条微信跟进话术？</div></div>
-  <div class="chips"><span class="chip">写条跟进话术</span><span class="chip">上次拜访说了啥</span></div>
+  <div class="body"><div class="msg ai"><div class="who">觅客精灵 · 副驾</div>你共负责 15 个客户，其中 3 个处于预合作。需要我按消耗或健康度帮你排个跟进优先级吗？</div></div>
+  <div class="chips"><span class="chip">谁最该本周跟进</span><span class="chip">预合作客户进展</span></div>
   <div class="foot"><input placeholder="问点什么…"><button>➤</button></div>
 </div>
+<div class="drawer-root" aria-hidden="true">
+  <div class="backdrop" data-drawer-close></div>
+  <div class="panel">
+    <div class="dhead"><div class="dtt">详情</div><button class="btn btn-ghost btn-sm" data-drawer-close>✕ 关闭</button></div>
+    <div class="dbody"></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 预合作模板：研途考研 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-yantu" hidden>
+  <!-- Profile header -->
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--accent),var(--violet))">研</div>
+    <div class="ph-info">
+      <div class="name">研途考研 <span class="stage pre">预合作</span></div>
+      <div class="meta">
+        <span>考研 / 职业教育</span>
+        <span>上海</span>
+        <span>年框 ¥300万+</span>
+        <span>客单价 ¥12,800</span>
+      </div>
+      <div class="desc">专注考研冲刺集训营的在线教育机构，以「名师+督学」为卖点，小红书投放处于起步阶段，有较强种草内容生产能力。</div>
+    </div>
+  </div>
+
+  <!-- Key people -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">王琳</div><div class="ci-role">市场总监 · 主要对接人</div><div class="ci-detail">决策影响力：高 | 沟通风格：直接、重数据 | 偏好微信沟通</div></div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">陈浩</div><div class="ci-role">CEO · 最终决策者</div><div class="ci-detail">决策影响力：最高 | 需要通过王琳预约 | 关注 ROI 和品牌曝光</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 调研报告 -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>AI 调研报告</h3><span class="badge blue">商机发现 Agent</span></div>
+    <p class="dim" style="font-size:13px;line-height:1.7;color:var(--text-2);margin-bottom:10px">研途考研近期动作密集：9 月考研大纲发布后密集上线「大纲解读」直播，并在小红书加大种草内容投放，#考研倒计时 话题阅读已破 3.2 亿，目标人群（大三/二战考生）正处于决策窗口。</p>
+    <div class="pts"><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ①</b><span>小红书是考研党「经验/焦虑」内容核心阵地，与其「大纲解读+冲刺」内容节奏高度契合，适合信息流种草 + 搜索词截流。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ②</b><span>客单 ¥12,800、决策周期 45–60 天，正好匹配「长效种草→留资→销售跟进」链路，预计留资成本可控在 ¥80 内。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">建议切入</b><span>以「考研倒计时 100 天」节点方案首触，先建档案推进拜访。</span></div></div>
+  </div>
+
+  <!-- 销售笔记 -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记</h3><span class="badge violet">跟进备忘</span></div>
+    <div class="sales-note">
+      <b>沟通偏好：</b>王琳喜欢看竞品案例和具体数据，发方案时务必附带对标账户效果。<br><br>
+      <b>客户痛点：</b>当前获客渠道单一（朋友圈广告为主），对小红书种草模式有兴趣但担心见效慢。<br><br>
+      <b>下一步：</b>本周内约线上会议，带一份「同类客户小红书投放案例+预估效果」简版 PPT。
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">时间线</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">线索转入档案</div><div class="d">由新客开拓「添加到档案」生成客户档案，进入拜访推进阶段。</div></div><div class="date">08-10</div></div>
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">商机发现 Agent 自动调研</div><div class="d">自动生成调研报告，识别出 #考研倒计时 话题破 3.2 亿的信号窗口。</div></div><div class="date">08-11</div></div>
+      <div class="it"><div class="dot terra"></div><div class="tx"><div class="t">首次触达待安排</div><div class="d">已通过王琳微信发送问候，等待对方确认会议时间。建议本周内完成首次通话。</div></div><div class="date">08-12</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">计划：首次正式拜访</div><div class="d">目标：了解预算节奏、确认决策链、演示小红书投放价值。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 预合作模板：成人在线学堂 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-chengren" hidden>
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--terra),#E0A878)">成</div>
+    <div class="ph-info">
+      <div class="name">成人在线学堂 <span class="stage pre">预合作</span></div>
+      <div class="meta">
+        <span>学历提升 / 成人高考</span>
+        <span>全国</span>
+        <span>报名季起量</span>
+        <span>客单价 ¥3,600</span>
+      </div>
+      <div class="desc">成人高考/专升本在线平台，以「低门槛入学+灵活学制」为核心卖点，8 月报名季是全年最大流量入口。</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">赵磊</div><div class="ci-role">运营负责人 · 对接人</div><div class="ci-detail">决策影响力：中高 | 沟通风格：务实、关注转化 | 偏好电话+邮件</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>AI 调研报告</h3><span class="badge blue">商机发现 Agent</span></div>
+    <p class="dim" style="font-size:13px;line-height:1.7;color:var(--text-2);margin-bottom:10px">成人高考 8 月报名季开启，咨询量周环比 +41%。该机构近期在短视频平台投放「低学历逆袭」人设内容，但小红书布局薄弱，存在明显的「搜索词蓝海」。</p>
+    <div class="pts"><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ①</b><span>小红书「成人高考经验帖」搜索量上升但供给少，适合以「备考经验 + 机构对比」内容做搜索截流。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ②</b><span>客单低、量大，靠规模化留资跑量，信息流版位 CPL 优势明显。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">建议切入</b><span>先用「报名季」节点方案低成本起量，验证后再扩预算。</span></div></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记</h3><span class="badge violet">跟进备忘</span></div>
+    <div class="sales-note">
+      <b>沟通偏好：</b>赵磊关注 CPA 和起量速度，不喜欢长周期方案。<br><br>
+      <b>客户痛点：</b>当前主要靠短视频引流，但用户质量不高，咨询→成交转化率仅 2.1%。<br><br>
+      <b>下一步：</b>利用 8 月报名季窗口，推一个「14 天试投方案」，预算控制在 5 万以内。
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">时间线</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">线索转入档案</div><div class="d">由新客开拓添加到档案，进入预合作池。</div></div><div class="date">08-10</div></div>
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">Agent 调研完成</div><div class="d">识别出报名季 + 搜索蓝海双重机会。</div></div><div class="date">08-11</div></div>
+      <div class="it"><div class="dot terra"></div><div class="tx"><div class="t">待首次联系</div><div class="d">计划通过电话触达，强调报名季时间紧迫性。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 预合作模板：新航道雅思 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-xinhangdao" hidden>
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--violet),var(--deep))">新</div>
+    <div class="ph-info">
+      <div class="name">新航道雅思 <span class="stage pre">预合作</span></div>
+      <div class="meta">
+        <span>语言留学 / 雅思</span>
+        <span>北京</span>
+        <span>新校区本地</span>
+        <span>客单价 ¥9,800</span>
+      </div>
+      <div class="desc">老牌雅思培训机构，近期新开 3 城本地校区，本地化获客需求骤增。目前获客依赖朋友圈广告，小红书几乎空白。</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">孙倩</div><div class="ci-role">市场经理 · 对接人</div><div class="ci-detail">决策影响力：中 | 沟通风格：温和、重视品牌调性 | 偏好面谈</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>AI 调研报告</h3><span class="badge blue">商机发现 Agent</span></div>
+    <p class="dim" style="font-size:13px;line-height:1.7;color:var(--text-2);margin-bottom:10px">春季留学展刚结束，雅思搜索量走高；该机构新开 3 城校区，本地获客需求骤增，但目前获客依赖朋友圈广告，小红书几乎空白。</p>
+    <div class="pts"><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ①</b><span>雅思考生重度依赖「经验帖 + 试听」决策，小红书种草转化链路成熟。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">匹配点 ②</b><span>多校区扩张 = 多地本地化投放，适合分城账户结构管理。</span></div><div class="pt" style="display:flex;gap:8px;font-size:13px;color:var(--text-2)"><b style="color:var(--ink);flex:none">建议切入</b><span>以「新校区开业 + 雅思冲刺」本地方案切入，建档案后约拜访。</span></div></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记</h3><span class="badge violet">跟进备忘</span></div>
+    <div class="sales-note">
+      <b>沟通偏好：</b>孙倩重视品牌形象，素材需精致，避免过度营销感。<br><br>
+      <b>客户痛点：</b>新校区冷启动困难，传统渠道获客成本持续走高。<br><br>
+      <b>下一步：</b>准备一份「本地化小红书投放方案」，突出分城精准定向优势。
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">时间线</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">线索转入档案</div><div class="d">由新客开拓添加，进入预合作池。</div></div><div class="date">08-10</div></div>
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">Agent 调研完成</div><div class="d">识别多校区扩张机会。</div></div><div class="date">08-11</div></div>
+      <div class="it"><div class="dot terra"></div><div class="tx"><div class="t">待首次联系</div><div class="d">计划约孙倩线下见面，带本地化方案。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 已有投放模板：华图公考（重点改造——客户手册风格） -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-huatu" hidden>
+  <!-- Health alert -->
+  <div class="health warn" style="margin-bottom:18px;background:var(--terra-soft);color:var(--terra);padding:9px 13px;border-radius:var(--r-md);font-weight:600">⚠ 健康度预警：华图公考近 7 天掉量 -34%，建议本周内排查搜索词与封面。</div>
+
+  <!-- Profile header -->
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--ok),#8E85C7)">华</div>
+    <div class="ph-info">
+      <div class="name">华图公考 <span class="stage on">已有投放</span></div>
+      <div class="meta">
+        <span>考公考编</span>
+        <span>年框 ¥500万</span>
+        <span>合作 6 个月</span>
+        <span>客单价 ¥6,800</span>
+      </div>
+      <div class="desc">公考培训头部品牌，年框客户，小红书投放稳定运行 6 个月。近期出现掉量预警需紧急处理。</div>
+    </div>
+  </div>
+
+  <!-- 关键人 -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">李明</div><div class="ci-role">市场经理 · 日常对接</div><div class="ci-detail">决策影响力：中高 | 沟通风格：专业、重数据 | 微信响应快 | 每周例行同步</div></div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">周总</div><div class="ci-role">VP 市场 · 预算审批</div><div class="ci-detail">决策影响力：最高 | 大事需其拍板 | 关注月度 ROI 和品牌安全</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 投放数据（精简） -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>投放概况</h3><button class="btn btn-ghost btn-sm" data-drawer-target="#tpl-camp" data-drawer-title="华图公考 · 客户投放">查看详细投放 →</button></div>
+    <div class="mini-stats">
+      <div class="ms"><div class="v">¥128万</div><div class="k">累计消耗</div></div>
+      <div class="ms"><div class="v">¥71</div><div class="k">平均 CPL</div></div>
+      <div class="ms"><div class="v">3</div><div class="k">在投账户</div></div>
+      <div class="ms"><div class="v" style="color:var(--terra)">-34%</div><div class="k">近 7 天环比</div></div>
+    </div>
+  </div>
+
+  <!-- 销售笔记（核心！） -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记 & 客户画像</h3><span class="badge violet">重要</span></div>
+    <div class="sales-note">
+      <b>客户性格：</b>李明专业理性，每周三下午固定同步数据；周总只看月报，大事才出面。<br><br>
+      <b>合作节奏：</b>每月初对齐本月目标和预算，月中同步一次数据，月末交付复盘。<br><br>
+      <b>历史痛点：</b>曾因素材违规被平台警告一次（2026-05），此后对素材审核非常敏感。<br><br>
+      <b>当前风险：</b>连续 3 天掉量，李明已微信询问原因。需今日内给出排查结论和优化方案，否则可能升级到周总。<br><br>
+      <b>增投机会：</b>省考公告发布在即（预计 9 月中），客户有意向在 9 月加预算 20%，需提前准备扩量方案。
+    </div>
+  </div>
+
+  <!-- 跟进时间线（丰富版） -->
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">完整记录</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">建立合作，首期开户</div><div class="d">签署年框协议，首批 3 个账户上线，预算 ¥60万/月。</div></div><div class="date">03-15</div></div>
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">首月复盘，CPL ¥72 达标</div><div class="d">客户满意，确认续投。约定每月初对齐目标。</div></div><div class="date">04-10</div></div>
+      <div class="it"><div class="dot terra"></div><div class="tx"><div class="t">素材违规警告</div><div class="d">一条素材触发平台审核，已整改。客户表示理解但提醒注意审核规范。</div></div><div class="date">05-20</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">Q2 季度复盘，续签确认</div><div class="d">Q2 累计消耗 ¥340万，平均 CPL ¥71。客户确认 Q3 续投并考虑增量。</div></div><div class="date">07-05</div></div>
+      <div class="it"><div class="dot terra"></div><div class="tx"><div class="t">⚠ 掉量预警开始</div><div class="d">连续 3 天消耗下滑，疑似搜索词失效。李明已询问，待今日回复。</div></div><div class="date">08-14</div></div>
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">计划：排查反馈 + 优化方案</div><div class="d">今日内完成关键词诊断，输出优化方案发给李明。</div></div><div class="date">今天</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">计划：省考前扩量沟通</div><div class="d">9 月初与李明沟通省考公告期增投 20% 方案。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 已有投放模板：中公教育 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-zhonggong" hidden>
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--accent),var(--violet))">中</div>
+    <div class="ph-info">
+      <div class="name">中公教育 <span class="stage on">已有投放</span></div>
+      <div class="meta">
+        <span>考公考编 / 职业教育</span>
+        <span>全国</span>
+        <span>合作 1 年</span>
+        <span>客单价 ¥5,200</span>
+      </div>
+      <div class="desc">职业教育龙头，多产品线覆盖考公/考编/职教。合作 1 年，投放稳定，关系良好，有增投意向。</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">张敏</div><div class="ci-role">品牌总监 · 对接人</div><div class="ci-detail">决策影响力：高 | 沟通风格：战略型、关注长期效果 | 偏好正式邮件+月度汇报</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>投放概况</h3><button class="btn btn-ghost btn-sm" data-drawer-target="#tpl-camp" data-drawer-title="中公教育 · 客户投放">查看详细投放 →</button></div>
+    <div class="mini-stats">
+      <div class="ms"><div class="v">¥96万</div><div class="k">累计消耗</div></div>
+      <div class="ms"><div class="v">¥68</div><div class="k">平均 CPL</div></div>
+      <div class="ms"><div class="v">5</div><div class="k">在投账户</div></div>
+      <div class="ms"><div class="v" style="color:var(--ok)">健康</div><div class="k">健康度</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记 & 客户画像</h3><span class="badge violet">重要</span></div>
+    <div class="sales-note">
+      <b>客户性格：</b>张敏注重策略和品牌，每次沟通喜欢先聊行业趋势再谈执行细节。<br><br>
+      <b>合作节奏：</b>月度正式复盘（邮件 PPT），平时微信保持轻量同步。<br><br>
+      <b>亮点：</b>Q2 复盘时客户主动提到「小红书渠道质量优于其他平台」，对我们的专业性认可度高。<br><br>
+      <b>增投机会：</b>张敏暗示 Q4 可能有新增预算，建议提前准备「Q4 种草+省考双节点」方案。
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">完整记录</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">建立合作</div><div class="d">从竞品转来，首批 2 个账户上线。</div></div><div class="date">去年</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">Q1 表现优异，扩至 5 账户</div><div class="d">CPL 持续低于大盘，客户追加预算。</div></div><div class="date">03月</div></div>
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">Q2 复盘，获得高度认可</div><div class="d">客户评价「小红书渠道质量最优」，确认续投。</div></div><div class="date">07-05</div></div>
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">AI 生成本周跟进话术</div><div class="d">基于上月数据自动产出微信跟进要点。</div></div><div class="date">08-13</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">计划：Q4 增投方案沟通</div><div class="d">准备「种草+省考」双节点方案，争取 9 月初汇报。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 已有投放模板：新东方前途 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-xindongfang" hidden>
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--violet),var(--deep))">新</div>
+    <div class="ph-info">
+      <div class="name">新东方前途 <span class="stage on">已有投放</span></div>
+      <div class="meta">
+        <span>语言留学</span>
+        <span>北京</span>
+        <span>合作 8 个月</span>
+        <span>客单价 ¥18,000</span>
+      </div>
+      <div class="desc">新东方旗下留学品牌，高端客户为主，客单价高但决策周期较长。投放稳健，素材要求精致。
+</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">陈晨</div><div class="ci-role">留学顾问 · 对接人</div><div class="ci-detail">决策影响力：中 | 沟通风格：细致、关注素材品质 | 对设计要求高</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>投放概况</h3><button class="btn btn-ghost btn-sm" data-drawer-target="#tpl-camp" data-drawer-title="新东方前途 · 客户投放">查看详细投放 →</button></div>
+    <div class="mini-stats">
+      <div class="ms"><div class="v">¥89万</div><div class="k">累计消耗</div></div>
+      <div class="ms"><div class="v">¥92</div><div class="k">平均 CPL</div></div>
+      <div class="ms"><div class="v">2</div><div class="k">在投账户</div></div>
+      <div class="ms"><div class="v" style="color:var(--ok)">健康</div><div class="k">健康度</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记 & 客户画像</h3><span class="badge violet">重要</span></div>
+    <div class="sales-note">
+      <b>客户性格：</b>陈晨对素材审美要求极高，每条素材都需要她确认后才可上线。<br><br>
+      <b>合作节奏：</b>素材审核周期 2–3 天，需提前规划素材排期。<br><br>
+      <b>注意事项：</b>避免使用夸张文案，品牌调性偏「专业+温暖」。<br><br>
+      <b>换题季机会：</b>雅思换题季临近（9 月），留学搜索量将上涨，建议提前准备换题季专属素材。
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">完整记录</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">建立合作</div><div class="d">从小规模试投开始，验证小红书留学赛道效果。</div></div><div class="date">年初</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">试投达标，扩大规模</div><div class="d">CPL 可控，客户同意增加预算和账户数。</div></div><div class="date">05月</div></div>
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">常规周复盘</div><div class="d">本周数据平稳，素材正在审核中。</div></div><div class="date">08-14</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">计划：换题季素材准备</div><div class="d">提前准备雅思换题季专属素材，8 月底前给陈晨审核。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 已有投放模板：高顿教育 -->
+<!-- ============================================================ -->
+<div class="dwrap" id="tpl-acc-gaodun" hidden>
+  <div class="profile-header">
+    <div class="ph-avatar" style="background:linear-gradient(135deg,var(--terra),#E0A878)">高</div>
+    <div class="ph-info">
+      <div class="name">高顿教育 <span class="stage on">已有投放</span></div>
+      <div class="meta">
+        <span>职业教育 / 财经</span>
+        <span>上海</span>
+        <span>合作 1.5 年</span>
+        <span>客单价 ¥9,900</span>
+      </div>
+      <div class="desc">财经考证（CPA/ACCA/中级会计）领域头部，合作最久的老客户，关系稳固，投放成熟。
+</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>关键人</h3></div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="ci-icon">👤</div>
+        <div class="ci-body"><div class="ci-name">周婷</div><div class="ci-role">市场VP · 直接决策</div><div class="ci-detail">决策影响力：最高 | 沟通风格：高效、结果导向 | 可直接决定预算</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>投放概况</h3><button class="btn btn-ghost btn-sm" data-drawer-target="#tpl-camp" data-drawer-title="高顿教育 · 客户投放">查看详细投放 →</button></div>
+    <div class="mini-stats">
+      <div class="ms"><div class="v">¥156万</div><div class="k">累计消耗</div></div>
+      <div class="ms"><div class="v">¥83</div><div class="k">平均 CPL</div></div>
+      <div class="ms"><div class="v">6</div><div class="k">在投账户</div></div>
+      <div class="ms"><div class="v" style="color:var(--ok)">健康</div><div class="k">健康度</div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="ch"><h3>销售笔记 & 客户画像</h3><span class="badge violet">重要</span></div>
+    <div class="sales-note">
+      <b>客户性格：</b>周婷非常高效，微信消息通常当天回复。不喜欢冗长文字，偏好要点式沟通。<br><br>
+      <b>合作状态：</b>最成熟账户之一，投放基本自动化运转，每月仅需例行同步。<br><br>
+      <b>特殊事项：</b>高顿集团层面在评估「AI 会计证」新产品线的小红书投放可能性，周婷让我先出一份小预算测试方案。<br><br>
+      <b>下一步：</b>准备「AI 会计证」测试方案，预算控制在 8 万以内，周期 2 周。
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>跟进 & 合作时间线</h3><span class="badge blue">完整记录</span></div>
+    <div class="tl-rich">
+      <div class="it"><div class="dot accent"></div><div class="tx"><div class="t">建立合作（最早客户之一）</div><div class="d">从小规模试投开始，逐步扩展至 6 个账户。</div></div><div class="date">1.5年前</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">多次扩量，关系稳固</div><div class="d">CPL 持续优于大盘，成为标杆案例。</div></div><div class="date">持续</div></div>
+      <div class="it"><div class="dot violet"></div><div class="tx"><div class="t">常规月度同步</div><div class="d">本月数据正常，周婷提到新产品线测试意向。</div></div><div class="date">08-12</div></div>
+      <div class="it"><div class="dot ok"></div><div class="tx"><div class="t">计划：「AI 会计证」测试方案</div><div class="d">准备小预算测试方案，2 周内提交。</div></div><div class="date">计划中</div></div>
+    </div>
+  </div>
+</div>
+
 <script src="app.js"></script>
+<script>
+(function(){
+  var stageSel=document.getElementById('acc-stage');
+  var custSel=document.querySelector('[data-client-filter]');
+  if(stageSel&&custSel){
+    stageSel.addEventListener('change',function(){
+      var v=stageSel.value;
+      Array.prototype.forEach.call(custSel.options,function(o){
+        if(o.value==='')return;
+        var show=(v==='全部'||o.getAttribute('data-stage')===v);
+        o.style.display=show?'':'none';
+        o.disabled=!show;
+      });
+    });
+  }
+})();
+</script>
 </body>
 </html>

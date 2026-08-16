@@ -427,3 +427,20 @@ button { font-family: inherit; cursor: pointer; }
 .creative .ct .t { font-weight: 600; font-size: 13px; }
 .creative .ct .d { font-size: 12px; color: var(--text-3); margin-top: 2px; }
 .table td.strong { font-weight: 700; }
+
+/* =========================================================
+   筛选窗口 + 氛围感留白（客户档案 / 客户投放 默认态）
+   ========================================================= */
+.filterbar { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-end; margin-bottom: 22px; }
+.fb-field { display: flex; flex-direction: column; gap: 6px; }
+.fb-field label { font-size: 12px; color: var(--text-3); font-weight: 600; }
+.fb-select { border: 1px solid var(--border); background: var(--surface); border-radius: var(--r-md); padding: 10px 14px; font: inherit; color: var(--ink); min-width: 210px; cursor: pointer; }
+.fb-select:focus { border-color: var(--accent); outline: none; }
+.ambient { min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 48px 20px; }
+.ambient .amb-ico { width: 76px; height: 76px; border-radius: 22px; background: linear-gradient(135deg, var(--accent-soft), var(--violet-soft)); display: grid; place-items: center; font-size: 36px; margin-bottom: 8px; }
+.ambient h3 { font-size: 18px; color: var(--ink); }
+.ambient p { color: var(--text-2); font-size: 13px; max-width: 400px; line-height: 1.8; }
+.ambient .amb-tip { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.cf-detail:empty { display: none; }
+.cf-detail { animation: fade .25s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

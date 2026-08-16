@@ -26,15 +26,17 @@
     <div class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13.5" cy="13.5" r="7.5" stroke="#fff" stroke-width="2.4"/><line x1="18.6" y1="18.6" x2="24.5" y2="24.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M23.5 5.5l1.3 2.9 2.9 1.3-2.9 1.3-1.3 2.9-1.3-2.9-2.9-1.3 2.9-1.3z" fill="#fff"/></svg></div><div><div class="name">觅客精灵</div><div class="sub">Sales Copilot</div></div></div>
     <nav class="nav">
       <div class="group">工作台</div>
-      <a href="dashboard.html">◧ 首页</a>
-      <a href="leads.html">✦ 新客开拓<span class="dot"></span></a>
-      <a href="clients.html">◉ 我的客户</a>
+      <a href="dashboard.html"><span class="ico">◧</span>首页</a>
+      <a href="leads.html"><span class="ico">✦</span>新客开拓</a>
+      <a href="clients.html"><span class="ico">◉</span>我的客户</a>
       <div class="group">客户</div>
-      <a href="account.html">◉ 客户档案</a>
-      <a href="campaign.html">◫ 客户投放</a>
-      <a href="proposals.html">▤ 提案与复盘</a>
-      <a href="tasks.html" class="active">☑ 待办 / 日程</a>
-      <a href="knowledge.html">❖ 知识库</a>
+      <a href="account.html"><span class="ico">◉</span>客户档案</a>
+      <a href="campaign.html"><span class="ico">◫</span>客户投放</a>
+      <a href="proposals.html"><span class="ico">▤</span>提案与复盘</a>
+      <div class="group">个人</div>
+      <a href="tasks.html" class="active"><span class="ico">☑</span>待办 / 日程</a>
+      <a href="knowledge.html"><span class="ico">❖</span>知识库</a>
+      <a href="qa.html"><span class="ico">💬</span>精灵问答</a>
     </nav>
     <div class="side-foot"><div class="av">孟</div><div><div class="who">孟承泽</div><div class="role">KA 销售 · 教育行业</div></div></div>
   </aside>
@@ -42,10 +44,10 @@
   <div class="main">
     <header class="topbar"><div><h1>待办 & 日程</h1></div>
       <div class="search">🔍<input placeholder="Ask anything"></div>
-      <button class="btn btn-primary btn-sm">＋ 新建</button>
     </header>
 
     <div class="content">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary btn-sm">＋ 新建</button></div>
       <div class="grid cols-3" style="grid-template-columns:1.3fr 1fr; gap:24px; align-items:start">
         <div>
           <div class="card" style="margin-bottom:24px">
@@ -62,7 +64,7 @@
           <div class="card">
             <div class="ch"><h3>📝 周报</h3></div>
             <button class="btn btn-primary" data-generate="#weekly">⚡ 生成本周周报</button>
-            <div id="weekly" class="doc" style="display:none;margin-top:14px;padding:20px">
+            <div id="weekly" class="doc" style="display:none;margin-top:14px;padding:20px; max-height:400px; overflow-y:auto">
               <span class="sec-tag">AI 生成</span>
               <h2>孟承泽 · 本周工作周报（第 33 周）</h2>
               <h4>一、业绩</h4><p>本周消耗 ¥48.2万，新增线索 312 条，平均留资成本 ¥88。</p>
@@ -72,13 +74,21 @@
           </div>
         </div>
 
-        <div class="card" style="position:sticky;top:88px">
-          <div class="ch"><h3>✅ 今日待办</h3></div>
-          <div class="todo"><div class="ck on"></div><div class="tx"><div class="t">排查华图公考掉量</div><div class="d">消耗环比 -34%</div></div><span class="badge danger">紧急</span></div>
-          <div class="todo"><div class="ck"></div><div class="tx"><div class="t">发送新航道 Q4 方案</div><div class="d">待确认后发出</div></div><span class="badge blue">AI</span></div>
-          <div class="todo"><div class="ck"></div><div class="tx"><div class="t">中公教育周复盘</div><div class="d">截止 18:00</div></div><span class="badge terra">节点</span></div>
-          <div class="todo"><div class="ck"></div><div class="tx"><div class="t">粉笔公考续约沟通</div><div class="d">意向增 20%</div></div></div>
-          <div class="todo"><div class="ck"></div><div class="tx"><div class="t">更新搜索词清单（考研）</div><div class="d">来自复盘建议</div></div><span class="badge violet">优化</span></div>
+        <div>
+          <div class="card" style="position:sticky;top:88px; margin-bottom:24px">
+            <div class="ch"><h3>✅ 今日待办</h3></div>
+            <div class="todo"><div class="ck on"></div><div class="tx"><div class="t">排查华图公考掉量</div><div class="d">消耗环比 -34%</div></div><span class="badge danger">紧急</span></div>
+            <div class="todo"><div class="ck"></div><div class="tx"><div class="t">发送新航道 Q4 方案</div><div class="d">待确认后发出</div></div><span class="badge blue">AI</span></div>
+            <div class="todo"><div class="ck"></div><div class="tx"><div class="t">中公教育周复盘</div><div class="d">截止 18:00</div></div><span class="badge terra">节点</span></div>
+            <div class="todo"><div class="ck"></div><div class="tx"><div class="t">粉笔公考续约沟通</div><div class="d">意向增 20%</div></div></div>
+            <div class="todo"><div class="ck"></div><div class="tx"><div class="t">更新搜索词清单（考研）</div><div class="d">来自复盘建议</div></div><span class="badge violet">优化</span></div>
+          </div>
+          <div class="card">
+            <div class="ch"><h3>🤖 AI 本周洞察</h3><span class="badge blue">自动</span></div>
+            <div class="li"><div class="ic violet">✦</div><div class="tx"><div class="t">预合作客户窗口期提醒</div><div class="d">#考研倒计时 话题破 3.2 亿，研途/新航道进入决策黄金周，建议本周内完成拜访。</div></div></div>
+            <div class="li"><div class="ic terra">!</div><div class="tx"><div class="t">华图公考需优先处理</div><div class="d">掉量已持续 3 天，若今日不排查可能影响月度 KPI。建议优先级调至最高。</div></div></div>
+            <div class="li"><div class="ic">↻</div><div class="tx"><div class="t">中公教育可推进增投</div><div class="d">近两周转化率稳定在 4.8%+，高于大盘均值，客户有增预算意向。</div></div></div>
+          </div>
         </div>
       </div>
     </div>
