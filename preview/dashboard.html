@@ -7,31 +7,44 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 .kpi-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-.tk { display:flex; flex-direction:column; gap:10px; }
-.spark { display:flex; align-items:flex-end; gap:3px; height:36px; }
-.spark i { flex:1; border-radius:3px 3px 0 0; background:var(--accent-soft); }
-.spark i.h { background:linear-gradient(180deg,var(--violet),var(--accent)); }
 .news { display:flex; gap:12px; padding:11px 0; border-top:1px solid var(--border); }
 .news:first-child { border-top:none; }
 .news .tag { font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; flex:none; }
 .news .t { font-weight:600; color:var(--ink); font-size:13px; }
 .news .d { font-size:12px; color:var(--text-2); margin-top:2px; }
 
-/* Donut chart for 业绩 */
-.donut { position:relative; width:140px; height:140px; margin:0 auto 14px; }
-.donut svg { width:100%; height:100%; transform:rotate(-90deg); }
-.donut .bg { fill:none; stroke:var(--surface-3); stroke-width:14; }
-.donut .seg { fill:none; stroke-width:14; stroke-linecap:round; }
-.donut .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.donut .center .pct { font-size:24px; font-weight:720; letter-spacing:-.02em; }
-.donut .center .lbl { font-size:11px; color:var(--text-3); }
+/* 我的业绩 */
+.perf .seg-meta { font-size:12px; color:var(--text-3); font-weight:600; }
+.perf .seg-meta b { font-weight:700; }
+.perf-top { display:flex; align-items:center; gap:18px; margin-bottom:18px; }
+.ring { position:relative; width:118px; height:118px; flex:none; }
+.ring svg { width:100%; height:100%; transform:rotate(-90deg); }
+.ring .bg { fill:none; stroke:var(--surface-3); stroke-width:9; }
+.ring .arc { fill:none; stroke:var(--accent); stroke-width:9; stroke-linecap:round; }
+.ring .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ring .center .pct { font-size:25px; font-weight:720; letter-spacing:-.03em; }
+.ring .center .lbl { font-size:11px; color:var(--text-3); margin-top:2px; }
+.perf-stats { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:14px 16px; min-width:0; }
+.perf-stats .ps { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.perf-stats .ps .lbl { font-size:12px; color:var(--text-3); }
+.perf-stats .ps .val { font-size:20px; font-weight:700; letter-spacing:-.02em; line-height:1; }
+.compo { margin-top:4px; }
+.compo-bar { display:flex; height:9px; border-radius:var(--r-pill); overflow:hidden; }
+.compo-bar i { display:block; height:100%; }
+.compo .legend { margin-top:10px; }
+.perf-foot { display:flex; align-items:baseline; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+.perf-foot b { font-size:18px; font-weight:700; letter-spacing:-.02em; }
 
-/* Mini bar chart for 早报 */
-.mini-bar { display:flex; align-items:flex-end; gap:4px; height:40px; margin-top:6px; }
-.mini-bar i { flex:1; border-radius:3px 3px 0 0; background:var(--accent-soft); min-height:6px; }
-.mini-bar i.f { background:linear-gradient(180deg,var(--violet),var(--accent)); }
-
-/* Legend dots */
+/* 早报 KPI — 干净排版，无裸柱状图 */
+.brief { display:flex; flex-direction:column; gap:6px; padding:16px 18px; border-radius:var(--r-md); background:var(--surface); border:1px solid var(--border); transition:.18s; }
+.brief:hover { border-color:var(--border-2); box-shadow:var(--sh-1); }
+.brief .b-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+.brief .b-lbl { font-size:12px; color:var(--text-3); font-weight:500; }
+.brief .b-val { font-size:26px; font-weight:720; letter-spacing:-.03em; line-height:1; }
+.brief .b-delta { font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:4px; margin-top:4px; }
+.brief .b-delta.up { color:var(--ok); }
+.brief .b-delta.down { color:var(--danger); }
+.brief .b-note { font-size:12px; color:var(--text-3); margin-top:6px; line-height:1.5; }
 .legend { display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
 .legend span { display:flex; align-items:center; gap:5px; font-size:12px; color:var(--text-2); }
 .legend span::before { content:''; width:8px; height:8px; border-radius:50%; flex:none; }
@@ -68,50 +81,61 @@
       <!-- Row 1: 早报 (left, wider) + 业绩饼图 (right) -->
       <div class="grid cols-3" style="grid-template-columns:1.6fr 1fr; gap:24px; margin-bottom:24px">
         <div class="card" style="background:linear-gradient(120deg,#fff,#F3EEFE);border-color:#E0DAFD">
-          <div class="ch"><h3>📋 今日早报 · 8 月 16 日 周日</h3><span class="badge blue">AI 已生成</span></div>
+          <div class="ch"><h3>今日早报 · 8 月 16 日 周日</h3><span class="badge blue">AI 已生成</span></div>
           <p class="note" style="margin:2px 0 16px">早安，承泽。昨日大盘整体向好，但 2 个账户出现异常需关注；考研赛道进入种草窗口，可推进预合作客户拜访。</p>
           <div class="kpi-row">
-            <div class="tk">
-              <div class="kpi"><div class="lbl">昨日客户总消耗</div><div class="val sm">¥48.2万</div><div class="delta up">▲ 6.3% 较上周日</div></div>
-              <div class="mini-bar"><i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i style="height:62%" class="f"></i><i style="height:80%"></i><i style="height:75%"></i></div>
+            <div class="brief">
+              <div class="b-head"><span class="b-lbl">昨日客户总消耗</span></div>
+              <div class="b-val">¥48.2<span style="font-size:16px;font-weight:600;color:var(--text-3)">万</span></div>
+              <div class="b-delta up">▲ 6.3% 较上周日</div>
             </div>
-            <div class="tk">
-              <div class="kpi"><div class="lbl">昨日留资数</div><div class="val sm">5,460</div><div class="delta up">▲ 9.1% 较上周日</div></div>
-              <div class="mini-bar"><i style="height:50%"></i><i style="height:60%"></i><i style="height:58%"></i><i style="height:72%" class="f"></i><i style="height:68%"></i><i style="height:78%"></i><i style="height:85%"></i></div>
+            <div class="brief">
+              <div class="b-head"><span class="b-lbl">昨日留资数</span></div>
+              <div class="b-val">5,460</div>
+              <div class="b-delta up">▲ 9.1% 较上周日</div>
             </div>
-            <div class="tk">
-              <div class="kpi"><div class="lbl">昨日留资成本</div><div class="val sm">¥88</div><div class="delta down">▲ ¥6 偏高</div></div>
-              <p class="note" style="margin-top:4px">高于赛道均值 ¥82，主因信息流版位按钮点击率下滑。</p>
+            <div class="brief">
+              <div class="b-head"><span class="b-lbl">昨日留资成本</span></div>
+              <div class="b-val">¥<span style="font-size:20px">88</span></div>
+              <div class="b-delta down">▲ ¥6 偏高</div>
+              <div class="b-note">高于赛道均值 ¥82，主因信息流版位按钮点击率下滑。</div>
             </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="ch"><h3>📊 我的业绩（本月）</h3><span class="badge">教育行业</span></div>
-          <div class="donut">
-            <svg viewBox="0 0 36 36">
-              <circle class="bg" cx="18" cy="18" r="15.9"/>
-              <circle class="seg" cx="18" cy="18" r="15.9" stroke="#5B5BD8" stroke-dasharray="68 32" style="stroke-dashoffset:0"/>
-              <circle class="seg" cx="18" cy="18" r="15.9" stroke="#8E85C7" stroke-dasharray="15 85" style="stroke-dashoffset:-68"/>
-              <circle class="seg" cx="18" cy="18" r="15.9" stroke="#B76F44" stroke-dasharray="10 90" style="stroke-dashoffset:-83"/>
-              <circle class="seg" cx="18" cy="18" r="15.9" stroke="#ECEAF1" stroke-dasharray="7 93" style="stroke-dashoffset:-93"/>
-            </svg>
-            <div class="center"><div class="pct">68%</div><div class="lbl">完成率</div></div>
+        <div class="card perf">
+          <div class="ch"><h3>我的业绩</h3><span class="seg-meta">本月 · <b style="color:var(--ok)">▲ 11.2%</b></span></div>
+          <div class="perf-top">
+            <div class="ring">
+              <svg viewBox="0 0 36 36">
+                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B5BD8"/><stop offset="1" stop-color="#8E85C7"/></linearGradient></defs>
+                <circle class="bg" cx="18" cy="18" r="15.9"/>
+                <circle class="arc" cx="18" cy="18" r="15.9" stroke="url(#ringGrad)" stroke-dasharray="68 32" stroke-dashoffset="0"/>
+              </svg>
+              <div class="center"><div class="pct">68%</div><div class="lbl">目标完成率</div></div>
+            </div>
+            <div class="perf-stats">
+              <div class="ps"><div class="lbl">本月消耗</div><div class="val">¥612万</div></div>
+              <div class="ps"><div class="lbl">在投账户</div><div class="val">23</div></div>
+              <div class="ps"><div class="lbl">管理客户</div><div class="val">15</div></div>
+              <div class="ps"><div class="lbl">平均留资成本</div><div class="val">¥85</div></div>
+            </div>
           </div>
-          <div class="kpi" style="margin-bottom:10px"><div class="lbl">本月消耗</div><div class="val sm">¥612万</div><div class="delta up">▲ 11.2%</div></div>
-          <div class="bar" style="margin-bottom:14px"><i style="width:68%"></i></div>
-          <div class="legend">
-            <span style="--c:#5B5BD8">考公考编 42%</span>
-            <span style="--c:#8E85C7">职业教育 25%</span>
-            <span style="--c:#B76F44">语言留学 18%</span>
-            <span style="--c:#938BA0">其他 15%</span>
+          <div class="compo">
+            <div class="compo-bar">
+              <i style="width:42%;background:var(--accent)"></i>
+              <i style="width:25%;background:var(--violet)"></i>
+              <i style="width:18%;background:var(--terra)"></i>
+              <i style="width:15%;background:var(--lav)"></i>
+            </div>
+            <div class="legend">
+              <span style="--c:#5B5BD8">考公考编 42%</span>
+              <span style="--c:#8E85C7">职业教育 25%</span>
+              <span style="--c:#B76F44">语言留学 18%</span>
+              <span style="--c:#938BA0">其他 15%</span>
+            </div>
           </div>
-          <div class="grid cols-2" style="gap:10px; margin-top:14px">
-            <div><div class="note">管理客户</div><div style="font-weight:700;font-size:17px">15</div></div>
-            <div><div class="note">在投账户</div><div style="font-weight:700;font-size:17px">23</div></div>
-            <div><div class="note">本月新增线索</div><div style="font-weight:700;font-size:17px">9</div></div>
-            <div><div class="note">平均留资成本</div><div style="font-weight:700;font-size:17px">¥85</div></div>
-          </div>
+          <div class="perf-foot"><span class="note">本月新增线索</span><b>9</b><span class="note">较上月 +2</span></div>
         </div>
       </div>
 
